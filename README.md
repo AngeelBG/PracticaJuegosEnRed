@@ -11,7 +11,7 @@
 ## Integrantes:
   
 | Nombre        | Apellidos       | Correo                       |              GitHub        |
-| ------------- |:---------------:| ----------------------------:|---------------------------:|
+| ------------- |:---------------:| ---------------------------- |--------------------------- |
 | Ángel         |Bachiller García | a.bachillerg@alumnos.urjc.es |https://github.com/AngeelBG |
 | Juan Carlos   |Laso Casares     | jc.laso@alumnos.urjc.es      |https://github.com/Juankr95 |
 

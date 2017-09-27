@@ -12,8 +12,8 @@
   + Ángel Bachiller García -> a.bachillerg@alumnos.urjc.es || https://github.com/AngeelBG
   + Juan Carlos Laso Casares -> jc.laso@alumnos.urjc.es || https://github.com/Juankr95
   
-| Nombre        | Apellidos     | Correo  | GitHub  |
-| ------------- |:-------------:| -----:|-----:|
-| col 3 is      | right-aligned | $1600 |$1600 |
-| col 2 is      | centered      |   $12 | $12 |
+| Nombre        | Apellidos       | Correo                       |              GitHub        |
+| ------------- |:---------------:| ----------------------------:|---------------------------:|
+| Ángel         |Bachiller García | a.bachillerg@alumnos.urjc.es |https://github.com/AngeelBG |
+| Juan Carlos   |Laso Casares     | jc.laso@alumnos.urjc.es      |https://github.com/Juankr95 |
 

@@ -11,7 +11,7 @@
    * También se tendrá incorporada una interfaz con menus y un muro de la fama, el cual mostrará los jugadores con mayor victorias. 
    * Un jugador podrá crear una sala y esperar a que otro jugador se una, o unirse a una sala ya anteriormente creada por otro jugador. Al finalizar una partida, el muro de la fama se actualizará y se mostrará por pantalla a los jugadores.
    * Si un jugador quiere crear una sala con el mismo nombre de una sala creada previamente, se le devolverá un error. Las salas de borran automáticamente cuando todos los jugadores la han abandonado.
-   * Un jugador podrá abandonar una sala en cualquier momento. Si queda un único jugador, la partida finalizá de forma automático.
+   * Un jugador podrá abandonar una sala en cualquier momento. Si queda un único jugador, la partida finalizá de forma automática.
  
 ## _Integrantes_:
   

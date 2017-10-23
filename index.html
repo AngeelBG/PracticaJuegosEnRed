@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title> RUNIC WARS</title>
+	
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/phaser.min.js"></script>
+        
+    
+    
+	<!--- <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script> 
+			<img src="https://i2.wp.com/snake-cartoon-images.clipartonline.net/_/rsrc/1357761474080/home/cartoon-snake_5.png" height="90px" width="90px" vspace=1></p>
+
+<script src="//cdn.jsdelivr.net/phaser/2.5.0/phaser.min.js"></script>
+        BOTON COMENZAR PARTIDA 			
+            <p style= "font-size">Nick: <input type = "text" id="apodo" maxlength = "25" class="info">
+			<button class = "myButton" id = "Bcomenzar" >Comenzar</button></p>
+            <p id="apodoDuplicado" ></p> --->
+	<script type="text/javascript"  src="app.js"></script>
+	</head>
+	<body>
+		
+		<!--- MENU PRINCIPAL --->
+		<div id = "menu" class = "page">
+            <div class = "title"> <img src="assets/Titulo.png" > </div>
+            <br>
+			<p><button class = "botonJugar" id = "Bjugar" ></button></p>
+            <br>
+            <p><button class = "botonInstrucciones" id = "Binstrucciones" ></button>
+               <button class = "botonRanking" id = "Branking" ></button></p>
+            <p><button class = "botonPersonajes" id = "Bpersonajes" ></button></p>
+			
+		      
+            
+
+		</div>
+
+		<!--- MENU JUGAR --->
+		<div id="menuJugar" class="page" style="width:70%; margin:auto;">
+			<br>
+			<br>
+                <p style= "font-size">Nick: <input type = "text" id="apodo" maxlength = "25" class="info">
+                <p id="apodoDuplicado" ></p>
+                <p><button class = "myButton2" id = "Binstrucciones" >ALIENS</button>
+                   <button class = "myButton" id = "Branking" >SPACE MARINES</button></p>
+				
+		</div>
+		 
+        
+        <!--- MENU INSTRUCCIONES --->
+		<div id="menuInstrucciones" class="page" >
+			<br>
+			<br>
+              
+        </div>
+        
+        <!--- MENU RANKING --->
+		<div id="menuRanking" class="page" >
+			<br>
+			<br>
+            <div id="tablaClas" class="datagrid">
+				<table id="rank">
+							<caption style="font-size:34px"><b>LeaderBoard</b></caption>
+						<thead>
+							<tr><th>Posicion</th><th>Jugadores</th><th>Puntos</th></tr>
+						</thead>
+					<tbody>
+						<tr><td>data</td><td>data</td><td>data</td></tr>
+						<tr class="alt"><td>data</td><td>data</td><td>data</td></tr>
+						<tr><td>data</td><td>data</td><td>data</td></tr>
+						<tr class="alt"><td>data</td><td>data</td><td>data</td></tr>
+						<tr><td>data</td><td>data</td><td>data</td></tr>
+					</tbody>
+				</table>
+			</div>
+              
+        </div>
+        
+        <!--- MENU PERSONAJES--->
+		<div id="menuPersonajes" class="page" >
+			<br>
+			<br>
+            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                  <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                  <li data-target="#myCarousel" data-slide-to="1"></li>
+                  <li data-target="#myCarousel" data-slide-to="2"></li>
+                  <li data-target="#myCarousel" data-slide-to="3"></li>
+                </ol>
+
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner">
+                  <div class="item active">
+                    <img src="http://www.gamerassaultweekly.com/wp-content/uploads/2017/06/cuphead_promo_casino_full-750x400.png" alt="Los Angeles" style="width:100%;">
+                  </div>
+
+                  <div class="item">
+                    <img src="http://cdn.images.express.co.uk/img/dynamic/143/750x445/814733.jpg" alt="Chicago" style="width:100%;">
+                  </div>
+
+                  <div class="item">
+                    <img src="http://www.laps4.com/foro/attachments/imagen-19303-reportada.jpg" alt="New york" style="width:100%;">
+                  </div>
+
+                  <div class="item">
+                    <img src="http://cdn02.nintendo-europe.com/media/images/10_share_images/games_15/nintendo_ds_22/SI_NDS_NewSuperMarioBrosDS.jpg" alt="New york" style="width:100%;">
+                  </div>
+                </div>
+
+
+
+
+                <!-- Left and right controls -->
+                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                  <span class="glyphicon glyphicon-chevron-left"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                  <span class="glyphicon glyphicon-chevron-right"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+            </div>  
+        </div>
+
+        
+		<!--- SALA DE ESPERA --->
+		<div id = "salaEspera" class = "page"> 
+			<p> Aún no puedes jugar </p> 
+			<p> Faltan más jugadores </p> 
+			<div id="start" class="page">
+				<button class = "myButton" id = "Bstart">Empezar Partida</button>
+				<p id="comienzo" class="error"></p>
+				<td>
+				<p id="noComienzo" class="error"></p>
+				</td>
+			</div>
+
+		</div>
+
+		<!--- JUEGO --->
+		<div id = "multi-snakes" class = "page">
+			<br>
+			<br>
+				<div style="float: left">
+					<canvas id="playground" width="640" height="480"></canvas>
+				</div>
+				<div id="console-container">
+					<div id="console"></div>
+				</div>
+		</div>
+		
+		<!--- FIN --->
+		<div id="tablaFinal" class="datagrid">
+			<table id="puntuaciones">
+				<p class="rank">Puntuación de la partida</p>
+			</table>
+		</div>
+		 
+		 
+	</body>
+</html>

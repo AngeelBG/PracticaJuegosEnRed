@@ -28,6 +28,19 @@
              [1,1,1,1,1,1,1,1,1,1],
              [1,1,1,1,1,1,1,1,1,1],
          ];
+		 
+        var tiles = [
+             [1,1,1,1,1,1,2,2,2,2],
+             [1,2,2,2,2,1,1,1,2,2],
+             [1,1,2,2,2,1,1,2,2,1],
+             [2,2,2,2,2,2,2,2,2,1],
+             [1,2,2,2,2,1,1,2,2,1],
+             [1,1,1,1,1,1,2,2,2,1],
+             [1,2,2,2,2,1,1,2,2,1],
+             [1,2,2,2,2,1,1,2,2,1],
+             [1,2,2,2,2,1,1,2,2,1],
+             [1,2,1,2,2,1,1,2,2,1],
+         ];
 
         var anchoTile = 100;
         var altoTile = 60;
@@ -40,15 +53,14 @@
         var tiledX;
         var tiledY;
 
-        //var result = 'Drag a sprite';
 
     function preload() {
         game.load.image('1', 'assets/TileG.png');
         game.load.image('2', 'assets/TileN.png');
         game.load.image('player1', 'assets/PLayer1.png');
+        game.load.image('player1click', 'assets/PLayer1Click.png');
         game.load.image('Spitter', 'assets/Spitter.png');
         game.load.image('SpitterClick', 'assets/SpitterClick.png');
-        //pos=game.input.activePointer.position;
         
     }
 
@@ -74,7 +86,6 @@
         //  Enables all kind of input actions on this image (click, etc)
         player1.inputEnabled = true;
 
-        text = game.add.text(250, 16, '', { fill: '#ffffff' });
 
         player1.events.onInputDown.add(listener, this);
 
@@ -82,32 +93,49 @@
     }
 
     function moveSprite(pointer) {
-
+        
+        //Tile a la que me quiero mover
         tiledX = Math.floor(pointer.x/(100));
         tiledY = Math.floor(pointer.y/(60));
         
-        if(tiledX >4){
+        actualTiledX = Math.floor(player1.x/(100));
+        actualTiledY = Math.floor(player1.y/(60));
+        
+        //Comprueba que no se salga de las casillas estipuladas
+        if(counter != 1 && (tiledX <= actualTiledX+1 & tiledX >= actualTiledX-1 & tiledY == actualTiledY) || (tiledY <= actualTiledY+1 & tiledY >= actualTiledY-1 & tiledX == actualTiledX)){
             
-        }else {
+            //me lo vuelve a pintar del color original del mapa
+            var posicionX = Math.floor(player1.x/(100));
+            var posicionY = Math.floor(player1.y/(60));
+            var tileType = mapa[posicionY][posicionX+1]; //recupera el tile anterior
+            tiles[posicionY][posicionX+1].loadTexture(tileType, 0);
+            tileType = mapa[posicionY][posicionX-1];
+            tiles[posicionY][posicionX-1].loadTexture(tileType, 0);
+            tileType = mapa[posicionY+1][posicionX];
+            tiles[posicionY+1][posicionX].loadTexture(tileType, 0);
+            tileType = mapa[posicionY-1][posicionX];
+            tiles[posicionY-1][posicionX].loadTexture(tileType, 0);
+            
+            //Actualizo la posición
             player1.x = tiledX*100;
             player1.y = tiledY*60;
             counter++;
+            
+        }else {
+            /* NO SE CONSIGUE BORRAR EL TEXTO UNA VEZ PUESTO: ARREGLAR */
+            text = game.add.text(500, 500, '', { fill: '#ffffff' });
+            text.text = "Selecciona una casilla válida";  
+            
         }
-        
-
-
-        
 
     }
 
 
     function listener () {
         
-        player1.loadTexture('SpitterClick', 0);
+        player1.loadTexture('player1click', 0);
         ponerVisibleButton($("#Bmover"), true);
         ponerVisibleButton($("#Batacar"), true);
-        //counter++;
-        text.text = "You clicked " + counter + " times!";
 
     }
 
@@ -191,10 +219,16 @@ $(function() {
 				})
     $("#Bmover").click(
 			function() {
+                    counter = 0;
                     game.input.onDown.add(moveSprite, this);
-                    if(counter == 1){
-                        player1.inputEnabled = false;
-                    }
+                    
+                    //colorea de azul las tiles a las que puedo moverme
+                    var posicionX = Math.floor(player1.x/(100));
+                    var posicionY = Math.floor(player1.y/(60));//AMPLIAR EL ARRAY 1 EN TODOS LOS SENTIDOS 
+                    tiles[posicionY][posicionX+1].loadTexture('player1', 0);
+                    tiles[posicionY+1][posicionX].loadTexture('player1', 0);
+                    tiles[posicionY-1][posicionX].loadTexture('player1', 0);
+                    tiles[posicionY][posicionX-1].loadTexture('player1', 0);
 				})
     
 })

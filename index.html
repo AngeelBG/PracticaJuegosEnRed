@@ -11,17 +11,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/phaser.min.js"></script>
+    <script type="text/javascript" src="js/phaser.js"></script>
         
-    
-    
-	<!--- <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script> 
-			<img src="https://i2.wp.com/snake-cartoon-images.clipartonline.net/_/rsrc/1357761474080/home/cartoon-snake_5.png" height="90px" width="90px" vspace=1></p>
-
-<script src="//cdn.jsdelivr.net/phaser/2.5.0/phaser.min.js"></script>
-        BOTON COMENZAR PARTIDA 			
-            <p style= "font-size">Nick: <input type = "text" id="apodo" maxlength = "25" class="info">
-			<button class = "myButton" id = "Bcomenzar" >Comenzar</button></p>
-            <p id="apodoDuplicado" ></p> --->
 	<script type="text/javascript"  src="app.js"></script>
 	</head>
 	<body>
@@ -42,13 +33,15 @@
 		</div>
 
 		<!--- MENU JUGAR --->
-		<div id="menuJugar" class="page" style="width:70%; margin:auto;">
+		<div id="menuJugar" class="page" >
 			<br>
 			<br>
-                <p style= "font-size">Nick: <input type = "text" id="apodo" maxlength = "25" class="info">
-                <p id="apodoDuplicado" ></p>
-                <p><button class = "myButton2" id = "Binstrucciones" >ALIENS</button>
-                   <button class = "myButton" id = "Branking" >SPACE MARINES</button></p>
+            <p>
+                <button class = "gameplay" id = "Bmover" > Mover </button>
+                <button class = "gameplay" id = "Batacar" > Atacar </button>
+            
+            </p>
+
 				
 		</div>
 		 
@@ -98,7 +91,7 @@
                 <!-- Wrapper for slides -->
                 <div class="carousel-inner">
                   <div class="item active">
-                    <img src="http://www.gamerassaultweekly.com/wp-content/uploads/2017/06/cuphead_promo_casino_full-750x400.png" alt="Los Angeles" style="width:100%;">
+                    <img src="assets/Tarjeta.png" alt="Los Angeles" style="width:100%;">
                   </div>
 
                   <div class="item">
@@ -128,28 +121,6 @@
                 </a>
             </div>  
         </div>
-
-        <!--- cambio --->
-
-		<!--- JUEGO --->
-		<div id = "multi-snakes" class = "page">
-			<br>
-			<br>
-				<div style="float: left">
-					<canvas id="playground" width="640" height="480"></canvas>
-				</div>
-				<div id="console-container">
-					<div id="console"></div>
-				</div>
-		</div>
-		
-		<!--- Prueba  --->
-		<!--- FIN  --->
-		<div id="tablaFinal" class="datagrid">
-			<table id="puntuaciones">
-				<p class="rank">Puntuación de la partida</p>
-			</table>
-		</div>
 		 
 		 
 	</body>

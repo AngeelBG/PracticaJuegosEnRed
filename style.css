@@ -57,9 +57,8 @@ span.crosshair {
 }
 
 .botonInstrucciones {
-
   background: transparent;
-  border: none !important;
+  border: none;
   background-image:url(assets/BotonInstrucciones.png);
   background-repeat:no-repeat;
   height:114px;
@@ -87,7 +86,7 @@ span.crosshair {
 .botonRanking {
 
   background: transparent;
-  border: none !important;
+  border: none ;
   background-image:url(assets/BotonRanking.png);
   background-repeat:no-repeat;
   height:114px;
@@ -113,7 +112,7 @@ span.crosshair {
 .botonPersonajes {
 
   background: transparent;
-  border: none !important;
+  border: none;
   background-image:url(assets/BotonPersonajes.png);
   background-repeat:no-repeat;
   height:114px;
@@ -135,6 +134,23 @@ span.crosshair {
 	font-size: 130%;
 
 }
+
+.gameplay{	
+	display:none;
+}
+
+/*#botonesJuego{
+  padding: 1em;
+  margin: 1em 0 1em 4em;
+  height: 50px;
+      position: relative;
+}*/
+
+#menu{
+	display:block;
+}
+
+
 
 /*
 .myButton {
@@ -176,7 +192,7 @@ span.crosshair {
 	background-color:#408c99;
 }*/
 
-.info{
+/*.info{
     text-align:center;
     font-size: 25px;
     font-family: Arial,Helvetica,  sans-serif;
@@ -184,11 +200,7 @@ span.crosshair {
     width:80%;
     height:35px;  
 }
-#playground {
-	width: 640px;
-	height: 480px;
-	background-color: #000;
-}
+
 #console-container {
 	float: left;
 	margin-left: 15px;
@@ -207,36 +219,20 @@ span.crosshair {
 #console p {
 	padding: 0;
 	margin: 0;
-}
-#menu{
-	display:block;
-}
+}*/
+
 .page{
 	margin:auto;
 	text-align:center;
 	display:none;
 }
-#apodo{
-	width:200px;
-	overflow:auto;
-}
 
-#multi-snakes{
-	display: none;
-}
-
-#FIN{
-	display: none;
-}
 
 
 #tablaClas{	
 	display: block;
 }
 
-#tablaFinal{	
-	display: none;
-}
 
 .datagrid table { 
 	border-collapse: collapse; 
@@ -297,7 +293,7 @@ span.crosshair {
 
 /* Carousel base class */
 .carousel {
-  height: 500px;
+  height: 400px;
   margin-bottom: 60px;
 }
 /* Since positioning the image, we need to help out the caption */
@@ -307,13 +303,15 @@ span.crosshair {
 
 /* Declare heights because of positioning of img element */
 .carousel .item {
-  height: 500px;
-  background-color: #777;
+  height: 400px;
+  background: transparent;
+  border: none;
+  border: none;
 }
 .carousel-inner > .item > img {
   position: absolute;
   top: 0;
   left: 0;
   min-width: 100%;
-  height: 500px;
+  height: 400px;
 }

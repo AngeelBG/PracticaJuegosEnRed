@@ -94,6 +94,7 @@
 
     function moveSprite(pointer) {
         
+        if(counter != 5){
         //Tile a la que me quiero mover
         tiledX = Math.floor(pointer.x/(100));
         tiledY = Math.floor(pointer.y/(60));
@@ -102,30 +103,37 @@
         actualTiledY = Math.floor(player1.y/(60));
         
         //Comprueba que no se salga de las casillas estipuladas
-        if(counter != 1 && (tiledX <= actualTiledX+1 & tiledX >= actualTiledX-1 & tiledY == actualTiledY) || (tiledY <= actualTiledY+1 & tiledY >= actualTiledY-1 & tiledX == actualTiledX)){
-            
-            //me lo vuelve a pintar del color original del mapa
-            var posicionX = Math.floor(player1.x/(100));
-            var posicionY = Math.floor(player1.y/(60));
-            var tileType = mapa[posicionY][posicionX+1]; //recupera el tile anterior
-            tiles[posicionY][posicionX+1].loadTexture(tileType, 0);
-            tileType = mapa[posicionY][posicionX-1];
-            tiles[posicionY][posicionX-1].loadTexture(tileType, 0);
-            tileType = mapa[posicionY+1][posicionX];
-            tiles[posicionY+1][posicionX].loadTexture(tileType, 0);
-            tileType = mapa[posicionY-1][posicionX];
-            tiles[posicionY-1][posicionX].loadTexture(tileType, 0);
-            
-            //Actualizo la posición
-            player1.x = tiledX*100;
-            player1.y = tiledY*60;
-            counter++;
-            
-        }else {
-            /* NO SE CONSIGUE BORRAR EL TEXTO UNA VEZ PUESTO: ARREGLAR */
-            text = game.add.text(500, 500, '', { fill: '#ffffff' });
-            text.text = "Selecciona una casilla válida";  
-            
+            if((tiledX <= actualTiledX+1 & tiledX >= actualTiledX-1 & tiledY == actualTiledY) || (tiledY <= actualTiledY+1 & tiledY >= actualTiledY-1 & tiledX == actualTiledX)){
+
+                //me lo vuelve a pintar del color original del mapa
+                var posicionX = Math.floor(player1.x/(100));
+                var posicionY = Math.floor(player1.y/(60));
+
+                var tileType = mapa[posicionY][posicionX+1]; //recupera el tile anterior
+                if((posicionX >= 0) && (posicionY >= 0)) tiles[posicionY][posicionX+1].loadTexture(tileType, 0);
+                
+                tileType = mapa[posicionY][posicionX-1];
+                if((posicionX > 0) && (posicionY >= 0)) tiles[posicionY][posicionX-1].loadTexture(tileType, 0);
+                
+                tileType = mapa[posicionY+1][posicionX];
+                if((posicionX >= 0) && (posicionY >= 0)) tiles[posicionY+1][posicionX].loadTexture(tileType, 0);
+                
+                tileType = mapa[posicionY-1][posicionX];
+                if((posicionX >= 0) && (posicionY > 0)) tiles[posicionY-1][posicionX].loadTexture(tileType, 0);
+
+                //Actualizo la posición
+                player1.x = tiledX*100;
+                player1.y = tiledY*60;
+                counter++;
+                //text.destroy();
+                cambioEstadoBloqueado($("#Batacar"),true);
+
+            }else {
+                /* NO SE CONSIGUE BORRAR EL TEXTO UNA VEZ PUESTO */
+                text = game.add.text(500, 500, '', { fill: '#ffffff' });
+                text.text = "Selecciona una casilla válida"; 
+
+            }
         }
 
     }
@@ -224,11 +232,15 @@ $(function() {
                     
                     //colorea de azul las tiles a las que puedo moverme
                     var posicionX = Math.floor(player1.x/(100));
-                    var posicionY = Math.floor(player1.y/(60));//AMPLIAR EL ARRAY 1 EN TODOS LOS SENTIDOS 
-                    tiles[posicionY][posicionX+1].loadTexture('player1', 0);
-                    tiles[posicionY+1][posicionX].loadTexture('player1', 0);
-                    tiles[posicionY-1][posicionX].loadTexture('player1', 0);
-                    tiles[posicionY][posicionX-1].loadTexture('player1', 0);
+                    var posicionY = Math.floor(player1.y/(60)); 
+
+                    if((posicionX >= 0) && (posicionY >= 0)) tiles[posicionY][posicionX+1].loadTexture('player1', 0);
+                    if((posicionX >= 0) && (posicionY >= 0)) tiles[posicionY+1][posicionX].loadTexture('player1', 0);
+                    if((posicionX >= 0) && (posicionY > 0)) tiles[posicionY-1][posicionX].loadTexture('player1', 0);
+                    if((posicionX > 0) && (posicionY >= 0)) tiles[posicionY][posicionX-1].loadTexture('player1', 0);
+                    
+                    //cambioEstadoBloqueado($("#Bmover"),false);
+                    cambioEstadoBloqueado($("#Batacar"),false);
 				})
     
 })

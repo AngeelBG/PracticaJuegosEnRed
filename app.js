@@ -1,6 +1,6 @@
 
 
- var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'menuJugar', { preload: preload, create: create, update: update });
+ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: preload, create: create, update: update });
    
 
         var mapa = [
@@ -225,7 +225,7 @@ $(function() {
                     ponerVisible($("#menu"), false);
                     ponerVisible($("#menuPersonajes"), true);
 				})
-	$("#BatrasIns").click(
+    $("#BatrasIns").click(
 			function() {
                     ponerVisible($("#menu"), true);
                     ponerVisible($("#menuInstrucciones"), false);

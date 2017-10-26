@@ -135,6 +135,32 @@ span.crosshair {
 
 }
 
+.botonAtras {
+
+  background: transparent;
+  border: none;
+  background-image:url(assets/BotonAtras.png);
+  background-repeat:no-repeat;
+  height:114px;
+  width:366px;
+  background-position:center;
+}
+
+.botonAtras:hover {
+  background-image:url(assets/BotonAtrasHover.png);
+  background-repeat:no-repeat;
+  height:114px;
+  width:366px
+  background-position:center;
+}
+
+.botonAtras:active {
+	position:relative;
+	top:1px;
+	font-size: 130%;
+
+}
+
 .gameplay{	
 	display:none;
 }

@@ -225,6 +225,21 @@ $(function() {
                     ponerVisible($("#menu"), false);
                     ponerVisible($("#menuPersonajes"), true);
 				})
+	$("#BatrasIns").click(
+			function() {
+                    ponerVisible($("#menu"), true);
+                    ponerVisible($("#menuInstrucciones"), false);
+				})
+    $("#BatrasRan").click(
+			function() {
+                    ponerVisible($("#menu"), true);
+                    ponerVisible($("#menuRanking"), false);
+				})
+    $("#BatrasPer").click(
+			function() {
+                    ponerVisible($("#menu"), true);
+                    ponerVisible($("#menuPersonajes"), false);
+				})
     $("#Bmover").click(
 			function() {
                     counter = 0;

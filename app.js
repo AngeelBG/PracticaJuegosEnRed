@@ -52,6 +52,8 @@
         var tiledX;
         var tiledY;
         var personajeSeleccionado;
+        var personajeAtacado;
+        var turno = 0;
 
         const ANCHOMAPA = 10;
         const ALTOMAPA = 10;
@@ -67,6 +69,7 @@
         
         game.load.image('1', 'assets/Cesped.png');
         game.load.image('2', 'assets/roca.png');
+        game.load.image('atacar', 'assets/Atacada.png');
         
         game.load.image('AlienQueen', 'assets/AlienQueen.png');
         game.load.image('AlienQueenClick', 'assets/AlienQueenClick.png');
@@ -92,6 +95,8 @@
         var posx = x;
         var posy = y;
         var numeral = id;
+        var hasMoved = false;
+        var hasAttacked = false;
         
         //var ataque = ataque;
         //var vida = vida;
@@ -127,10 +132,47 @@
             return numeral;
         };
         
+        this.getHasMoved = function () {
+            return hasMoved;
+        };
+        
+        this.getHasAttacked = function () {
+            return hasAttacked;
+        };
+        
+        this.setHasMoved = function (cambio) {
+            hasMoved = cambio;
+            if(cambio) cambioEstadoBloqueado($("#Bmover"),false);
+        };
+        
+        this.setHasAttacked = function (cambio) {
+            hasAttacked = cambio;
+            if(cambio) cambioEstadoBloqueado($("#Batacar"),false);
+        };
+        
+        this.getLife = function () {
+            return life;
+        };
+        
+        this.setLife = function (nuevaVida) {
+            life -= nuevaVida;
+        };
+        
+        this.getRange = function () {
+            return range;
+        };
+        
+        this.getDamage = function () {
+            return damage;
+        };
+        
         this.mov = function () {
             return movi;
         };
         
+        this.kill = function () {
+            tropa.kill();
+        };
         
         
         /*this.setSprite = function(sprite){
@@ -162,7 +204,7 @@
         
         //arrayPersonajes = new Array(6);
         //arrayPersonajes[0] = new Tropa ('alien', 'player1', 5*anchoTile, 5*altoTile, 2, 2, 20);
-        alien1 = new Tropa ('AlienQueen', 'AlienQueen', 4*anchoTile, 0*altoTile, 2, 40, 150, 1, 2);
+        alien1 = new Tropa ('AlienQueen', 'AlienQueen', 4*anchoTile, 0*altoTile, 6, 200, 150, 1, 2);
         alien2 = new Tropa ('Spitter', 'Spitter', 6*anchoTile, 1*altoTile, 2, 20, 70, 4, 3);
         
         marine1 = new Tropa ('King', 'King', 4*anchoTile, 9*altoTile, 2, 30, 120, 2, 6);
@@ -193,30 +235,76 @@
   
     }
 
-    /*function atacar(pointer, player){
+   function atacar(pointer){
         
-        var distancia = player.rango;
-        var daño = player.daño;
-        
-        var posicionX = Math.floor(player2.getX/(100));
-        var posicionY = Math.floor(player2.getY/(60));
-        
-        var ratonX = Math.floor(pointer.x/(100));
-        var ratonY = Math.floor(pointer.y/(60));
-        
-        /////////// copiar y pegar codigo de volver a pintar tiles antiguos
-        
-        if(( (Math.abs(ratonX - posicionX) + Math.abs(ratonY - posicionY)) <= distancia ) && (jugadores[ratonX][ratonY] == 2)){
-            
-            player.setVida(daño);
-            //bloquear boton atacar y contador
+        if((counter != 1) && (personajeSeleccionado != null)){
+            //Tile a la que me quiero mover
+            tiledX = Math.floor(pointer.x/(100));
+            tiledY = Math.floor(pointer.y/(60));
+
+            actualTiledX = Math.floor(personajeSeleccionado.getX()/(100));
+            actualTiledY = Math.floor(personajeSeleccionado.getY()/(60));
+
+            var posicionX = Math.floor(personajeSeleccionado.getX()/(100));
+            var posicionY = Math.floor(personajeSeleccionado.getY()/(60)); 
+
+            for (var i=0; i < 10; i++){
+                for (var j= 0; j<10 ; j++){
+                    if((Math.abs(i - actualTiledX) + Math.abs(j - actualTiledY) <= personajeSeleccionado.getRange()) && (jugadores[j][i] != 1)  && ((i == tiledX)&(j == tiledY)) && ( (jugadores[j][i] == 6) | (jugadores[j][i] == 7) | (jugadores[j][i] == 8) | (jugadores[j][i] == 9) )){
+
+                    identificador = jugadores[tiledY][tiledX];
+                        
+                        switch(identificador) {
+                            case 6:
+                                marine1.setLife(personajeSeleccionado.getDamage());
+                                if(marine1.getLife()<=0) {
+                                    marine1.kill();
+                                    jugadores[tiledY][tiledX] = 1;
+                                    ///////////////GAME OVER
+                                    game.world.removeAll();
+                                    text = game.add.text(500, 500, '', { fill: '#ffffff' });
+                                    text.text = "GANAN LOS ALIENS";
+                                }
+                                
+                                break;
+                            case 7:
+                                marine2.setLife(personajeSeleccionado.getDamage());
+                                if(marine2.getLife()<=0) marine2.kill();
+                                break;
+                            default:
+                        }
+                        
+                        personajeSeleccionado.setHasAttacked(true);
+
+                        counter++;
+                        //text.destroy();
+                        cambioEstadoBloqueado($("#Batacar"),false);
+
+                        for (var k=0; k < 10; k++){
+                            for (var l= 0; l <10 ; l++){
+                                if((Math.abs(k - posicionX) + Math.abs(l - posicionY) <= personajeSeleccionado.getRange())){
+                                    var tileType = mapa[l][k];
+                                    tiles[l][k].loadTexture(tileType, 0);
+
+                                }              
+                            }
+                        }
+                    }else {
+                    /* NO SE CONSIGUE BORRAR EL TEXTO UNA VEZ PUESTO */
+                    //text = game.add.text(500, 500, '', { fill: '#ffffff' });
+                    //text.text = "Selecciona una casilla válida"; 
+
+                    }              
+                }
+            }
+
         }
         
-    }*/
+    }
 
-    function moveSprite(pointer, player) {
+    function moveSprite(pointer) {
         
-        if(counter != 5){
+        if((counter != 1) && (personajeSeleccionado != null)){
             //Tile a la que me quiero mover
             tiledX = Math.floor(pointer.x/(100));
             tiledY = Math.floor(pointer.y/(60));
@@ -233,10 +321,12 @@
                         personajeSeleccionado.mover(tiledX*100,tiledY*60);
                         jugadores[tiledY][tiledX] = personajeSeleccionado.getNumeral();
                         jugadores[posicionY][posicionX] = 1;
+                        personajeSeleccionado.setHasMoved(true);
 
                         counter++;
                         //text.destroy();
                         cambioEstadoBloqueado($("#Batacar"),true);
+                        cambioEstadoBloqueado($("#Bmover"),false);
 
                         for (var k=0; k < 10; k++){
                             for (var l= 0; l <10 ; l++){
@@ -266,49 +356,62 @@
             coordY = Math.floor(pointer.y/(60));
 
             identificador = jugadores[coordY][coordX];
-            switch(identificador) {
-                case 2:
-                    alien2.setSprite('Spitter');
-                    marine1.setSprite('King');
-                    marine2.setSprite('Tank');
-                    personajeSeleccionado = alien1;
-                    //text = game.add.text(500, 500, '', { fill: '#ffffff' });
-                    //text.text = "Personaje1";
-                    alien1.setSprite('AlienQueenClick');
-                    break;
-                case 3:
-                    alien1.setSprite('AlienQueen');
-                    marine1.setSprite('King');
-                    marine2.setSprite('Tank');
-                    personajeSeleccionado = alien2;
-                    //text = game.add.text(500, 500, '', { fill: '#ffffff' });
-                    //text.text = "Personaje2";
-                    alien2.setSprite('SpitterClick');
-                    break;
-                    
-                case 6:
-                    marine2.setSprite('Tank');
-                    alien1.setSprite('AlienQueen');
-                    alien2.setSprite('Spitter');
-                    personajeSeleccionado = marine1;
-                    marine1.setSprite('KingClick');
-                    break;
-                case 7:
-                    marine1.setSprite('King');
-                    alien1.setSprite('AlienQueen');
-                    alien2.setSprite('Spitter');
-                    personajeSeleccionado = marine2;
-                    marine2.setSprite('TankClick');
-                    break;
-                    
-                default:
+            
+            if(turno % 2 == 0){
+                switch(identificador) {
+                    case 2:
+                        alien2.setSprite('Spitter');
+                        marine1.setSprite('King');
+                        marine2.setSprite('Tank');
+                        personajeSeleccionado = alien1;
+                        alien1.setSprite('AlienQueenClick');
+                        if(!personajeSeleccionado.getHasMoved()){ cambioEstadoBloqueado($("#Bmover"),true); cambioEstadoBloqueado($("#Besperar"),true);}
+                        if(!personajeSeleccionado.getHasAttacked()){ cambioEstadoBloqueado($("#Batacar"),true); cambioEstadoBloqueado($("#Besperar"),true);}
+                        break;
+                    case 3:
+                        alien1.setSprite('AlienQueen');
+                        marine1.setSprite('King');
+                        marine2.setSprite('Tank');
+                        personajeSeleccionado = alien2;
+                        alien2.setSprite('SpitterClick');
+                        if(!personajeSeleccionado.getHasMoved()){ cambioEstadoBloqueado($("#Bmover"),true); cambioEstadoBloqueado($("#Besperar"),true);}
+                        if(!personajeSeleccionado.getHasAttacked()){ cambioEstadoBloqueado($("#Batacar"),true); cambioEstadoBloqueado($("#Besperar"),true);}
+                        break;
+                    default:
 
+                }
+            } else {
+                switch(identificador) {
+                    case 6:
+                        marine2.setSprite('Tank');
+                        alien1.setSprite('AlienQueen');
+                        alien2.setSprite('Spitter');
+                        personajeSeleccionado = marine1;
+                        marine1.setSprite('KingClick');
+                        if(!personajeSeleccionado.getHasMoved()){ cambioEstadoBloqueado($("#Bmover"),true); cambioEstadoBloqueado($("#Besperar"),true);}
+                        if(!personajeSeleccionado.getHasAttacked()){ cambioEstadoBloqueado($("#Batacar"),true); cambioEstadoBloqueado($("#Besperar"),true);}
+                        break;
+                    case 7:
+                        marine1.setSprite('King');
+                        alien1.setSprite('AlienQueen');
+                        alien2.setSprite('Spitter');
+                        personajeSeleccionado = marine2;
+                        marine2.setSprite('TankClick');
+                        if(!personajeSeleccionado.getHasMoved()){ cambioEstadoBloqueado($("#Bmover"),true); cambioEstadoBloqueado($("#Besperar"),true);}
+                        if(!personajeSeleccionado.getHasAttacked()){ cambioEstadoBloqueado($("#Batacar"),true); cambioEstadoBloqueado($("#Besperar"),true);}
+                        break;
+
+                    default:
+
+                }
             }
         }
 
 
         ponerVisibleButton($("#Bmover"), true);
         ponerVisibleButton($("#Batacar"), true);
+        ponerVisibleButton($("#Besperar"), true);
+        ponerVisibleButton($("#Bfin"), true);
 
     }
 
@@ -319,6 +422,7 @@
         //updateMarker();
         //var movimiento = arrayPersonajes[0].getX();
         //game.debug.text("PlayerX:" + player1.x + " PlayerY:" + player1.y + "TileX:" + tiledX + " TileY:" + tiledY + " P: ", 180, 200);
+        game.debug.text("Turno:" + turno, 180, 200);
         
         /*if (game.input.activePointer.isDown)
         {
@@ -365,7 +469,7 @@ function cambioEstadoBloqueado(boton, nuevoEstado){
 // funcion que se invoca al cargar la pagina
 $(function() {
 	
-	cambioEstadoBloqueado($("#Bstart"),false);
+	cambioEstadoBloqueado($("#Bstart"),false);//////////////////////////////////////////////////////////// REVISAR
     
     $("#Bjugar").click(
 			function() {
@@ -415,7 +519,8 @@ $(function() {
                     counter = 0;
                     game.input.onDown.add(moveSprite, this);
                     
-                if(personajeSeleccionado != null){
+                    var movido = personajeSeleccionado.getHasMoved();
+                if((personajeSeleccionado != null)  && ( movido == false) ){
                     //colorea de azul las tiles a las que puedo moverme
                     var posicionX = Math.floor(personajeSeleccionado.getX()/(100));
                     var posicionY = Math.floor(personajeSeleccionado.getY()/(60));
@@ -437,8 +542,65 @@ $(function() {
                     cambioEstadoBloqueado($("#Batacar"),false);
 				})
     
+    $("#Batacar").click(
+			function() {
+                    counter = 0;
+                    game.input.onDown.add(atacar, this);
+                    
+                    var atacado = personajeSeleccionado.getHasAttacked();
+                    if((personajeSeleccionado != null)  && ( atacado == false) ){
+                        //colorea de azul las tiles a las que puedo moverme
+                        var posicionX = Math.floor(personajeSeleccionado.getX()/(100));
+                        var posicionY = Math.floor(personajeSeleccionado.getY()/(60));
+
+                        var rang = personajeSeleccionado.getRange();
+                        for (var k=0; k < 10; k++){
+                            for (var l= 0; l <10 ; l++){
+                                if(( (Math.abs(k - posicionX) + Math.abs(l - posicionY)) <= rang ) && (mapa[l][k]!=2) ){
+
+                                    tiles[l][k].loadTexture('atacar', 0);
+
+                                }              
+                            }
+                        }
+                    }
+                    
+                    
+                    //cambioEstadoBloqueado($("#Bmover"),false);
+                    cambioEstadoBloqueado($("#Batacar"),false);
+				})
+    
+    $("#Besperar").click(
+			function() {
+                    personajeSeleccionado.setHasMoved(true);
+                    personajeSeleccionado.setHasAttacked(true);
+                    cambioEstadoBloqueado($("#Besperar"),false);
+				})
+    
+    $("#Bfin").click(
+			function() {
+                    
+                    if(turno % 2 == 0){
+                        alien1.setHasMoved(false);
+                        alien2.setHasMoved(false);
+                        alien1.setHasAttacked(false);
+                        alien2.setHasAttacked(false);
+                    } else {
+                        marine1.setHasMoved(false);
+                        marine2.setHasMoved(false);
+                        marine1.setHasAttacked(false);
+                        marine2.setHasAttacked(false);
+                    }
+                    turno++;
+                    alien2.setSprite('Spitter');
+                    marine1.setSprite('King');
+                    marine2.setSprite('Tank');
+                    alien1.setSprite('AlienQueen');
+                
+                    cambioEstadoBloqueado($("#Batacar"),true);
+                    cambioEstadoBloqueado($("#Bmover"),true);
+                    cambioEstadoBloqueado($("#Besperar"),true);
+				})
+    
 })
                 
-
-                
-

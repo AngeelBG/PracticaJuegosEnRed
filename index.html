@@ -14,6 +14,7 @@
     <script type="text/javascript" src="js/phaser.js"></script>
         
 	<script type="text/javascript"  src="app.js"></script>
+        
 	</head>
 	<body>
 		
@@ -37,11 +38,16 @@
 			<br>
 			<br>
             <div id="zonaJuego"></div>
+            <div id="console"></div>
+            <div id="botonesJuego">
                 <p>
-                    <button class = "gameplay" id = "Bmover" > Mover </button>
-                    <button class = "gameplay" id = "Batacar" > Atacar </button>
+                    <button class = "botonMover" id = "Bmover" >  </button>
+                    <button class = "botonAtacar" id = "Batacar" >  </button>
+                    <button class = "botonEsperar" id = "Besperar" >  </button>
+                    <button class = "botonFin" id = "Bfin" >  </button>
 
                 </p>
+            </div>
 
 
 				
@@ -50,7 +56,7 @@
         
         <!--- MENU INSTRUCCIONES --->
 		<div id="menuInstrucciones" class="page" >
-			<button class = "botonAtras" id = "BatrasIns" ></button>
+            <button class = "botonAtras" id = "BatrasIns" ></button>
 			<br>
             <div class = "title"> <img src="assets/Instrucciones.png" > </div>
 			<br>
@@ -59,30 +65,19 @@
         
         <!--- MENU RANKING --->
 		<div id="menuRanking" class="page" >
-			<button class = "botonAtras" id = "BatrasRan" ></button>
+            <button class = "botonAtras" id = "BatrasRan" ></button>
 			<br>
+            <div class = "title"> <img src="assets/RankingPrueba.png" > </div>
 			<br>
             <div id="tablaClas" class="datagrid">
-				<table id="rank">
-							<caption style="font-size:34px"><b>LeaderBoard</b></caption>
-						<thead>
-							<tr><th>Posicion</th><th>Jugadores</th><th>Puntos</th></tr>
-						</thead>
-					<tbody>
-						<tr><td>data</td><td>data</td><td>data</td></tr>
-						<tr class="alt"><td>data</td><td>data</td><td>data</td></tr>
-						<tr><td>data</td><td>data</td><td>data</td></tr>
-						<tr class="alt"><td>data</td><td>data</td><td>data</td></tr>
-						<tr><td>data</td><td>data</td><td>data</td></tr>
-					</tbody>
-				</table>
+
 			</div>
               
         </div>
         
         <!--- MENU PERSONAJES--->
 		<div id="menuPersonajes" class="page" >
-			<button class = "botonAtras" id = "BatrasPer" ></button>
+            <button class = "botonAtras" id = "BatrasPer" ></button>
 			<br>
             <div class = "title"> <img src="assets/Aliens.png" > </div>
 			<br>
@@ -98,19 +93,19 @@
                 <!-- Wrapper for slides -->
                 <div class="carousel-inner">
                   <div class="item active">
-                    <img src="assets/alienqueen.png" style="width:100%;">
+                    <img src="assets/alienqueent.png" style="width:100%;">
                   </div>
 
                   <div class="item">
-                    <img src="assets/spitter.png" style="width:100%;">
+                    <img src="assets/spittert.png" style="width:100%;">
                   </div>
 
                   <div class="item">
-                    <img src="assets/claws.png" style="width:100%;">
+                    <img src="assets/clawst.png" style="width:100%;">
                   </div>
 
                   <div class="item">
-                    <img src="assets/charger.png" style="width:100%;">
+                    <img src="assets/chargert.png" style="width:100%;">
                   </div>
                 </div>
 
@@ -134,28 +129,28 @@
             <div id="myCarousel2" class="carousel slide" data-ride="carousel">
                 <!-- Indicators -->
                 <ol class="carousel-indicators">
-                  <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                  <li data-target="#myCarousel" data-slide-to="1"></li>
-                  <li data-target="#myCarousel" data-slide-to="2"></li>
-                  <li data-target="#myCarousel" data-slide-to="3"></li>
+                  <li data-target="#myCarousel2" data-slide-to="0" class="active"></li>
+                  <li data-target="#myCarousel2" data-slide-to="1"></li>
+                  <li data-target="#myCarousel2" data-slide-to="2"></li>
+                  <li data-target="#myCarousel2" data-slide-to="3"></li>
                 </ol>
 
                 <!-- Wrapper for slides -->
                 <div class="carousel-inner">
                   <div class="item active">
-                    <img src="assets/king.png" style="width:100%;">
+                    <img src="assets/kingt.png" style="width:100%;">
                   </div>
 
                   <div class="item">
-                    <img src="assets/ranger.png" style="width:100%;">
+                    <img src="assets/rangert.png" style="width:100%;">
                   </div>
 
                   <div class="item">
-                    <img src="assets/marine.png" style="width:100%;">
+                    <img src="assets/marinet.png" style="width:100%;">
                   </div>
 
                   <div class="item">
-                    <img src="assets/tank.png" style="width:100%;">
+                    <img src="assets/tankt.png" style="width:100%;">
                   </div>
                 </div>
 
@@ -173,6 +168,8 @@
                 </a>
             </div> 
         </div>
+
+
 		 
 		 
 	</body>

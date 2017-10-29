@@ -13,9 +13,13 @@
     max-height: 5000px;
     padding: 2em 2em em;
 }*/
-body {            
-    background: #103E66;
-    color: #545454;
+body { 
+    background-image:url(assets/Background.png); 
+    background-repeat:no-repeat; 
+    background-attachment:fixed; 
+    background-position:center; 
+    /*background: #103E66;
+    color: #545454;*/
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 20px;
     line-height: 1.3;
@@ -161,9 +165,117 @@ span.crosshair {
 
 }
 
+.botonMover {
+
+  display:none;
+  background: transparent;
+  border: none;
+  background-image:url(assets/BotonMover.png);
+  background-repeat:no-repeat;
+  height:60px;
+  width:100px;
+  background-position:center;
+}
+
+.botonMover:hover {
+  background-image:url(assets/BotonMoverHover.png);
+  background-repeat:no-repeat;
+  height:60px;
+  width:100px;
+  background-position:center;
+}
+
+.botonMover:active {
+	position:relative;
+	top:1px;
+	font-size: 130%;
+
+}
+
+.botonAtacar {
+
+  display:none;
+  background: transparent;
+  border: none;
+  background-image:url(assets/BotonAtacar.png);
+  background-repeat:no-repeat;
+  height:60px;
+  width:100px;
+  background-position:center;
+}
+
+.botonAtacar:hover {
+  background-image:url(assets/BotonAtacarHover.png);
+  background-repeat:no-repeat;
+  height:60px;
+  width:100px;
+  background-position:center;
+}
+
+.botonAtacar:active {
+	position:relative;
+	top:1px;
+	font-size: 130%;
+
+}
+
+.botonEsperar {
+
+  display:none;
+  background: transparent;
+  border: none;
+  background-image:url(assets/BotonEsperar.png);
+  background-repeat:no-repeat;
+  height:60px;
+  width:100px;
+  background-position:center;
+}
+
+.botonEsperar:hover {
+  background-image:url(assets/BotonEsperarHover.png);
+  background-repeat:no-repeat;
+  height:60px;
+  width:100px;
+  background-position:center;
+}
+
+.botonEsperar:active {
+	position:relative;
+	top:1px;
+	font-size: 130%;
+
+}
+
+.botonFin {
+
+  display:none;
+  background: transparent;
+  border: none;
+  background-image:url(assets/BotonFin.png);
+  background-repeat:no-repeat;
+  height:60px;
+  width:100px;
+  background-position:center;
+}
+
+.botonFin:hover {
+  background-image:url(assets/BotonFinHover.png);
+  background-repeat:no-repeat;
+  height:60px;
+  width:100px;
+  background-position:center;
+}
+
+.botonFin:active {
+	position:relative;
+	top:1px;
+	font-size: 130%;
+
+}
+/*
 .gameplay{	
 	display:none;
-}
+}*/
 
 /*#botonesJuego{
   padding: 1em;

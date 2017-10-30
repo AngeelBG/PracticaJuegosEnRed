@@ -350,7 +350,7 @@
             for (var i=0; i < 10; i++){
                 for (var j= 0; j<10 ; j++){
                     //Compruebo las casillas a las que puedo atacar, y si hay un personaje enemigo en ella.
-                    if((Math.abs(i - actualTiledX) + Math.abs(j - actualTiledY) <= personajeSeleccionado.getRange()) && (jugadores[j][i] != 1)  && ((i == tiledX)&(j == tiledY)) && ( (jugadores[j][i] == 6) | (jugadores[j][i] == 7) | (jugadores[j][i] == 8) | (jugadores[j][i] == 9) )){
+                    if((Math.abs(i - actualTiledX) + Math.abs(j - actualTiledY) <= personajeSeleccionado.getRange()) /*&& (jugadores[j][i] != 1)*/ && ((i == tiledX)&(j == tiledY)) && ( (jugadores[j][i] == 1) | (jugadores[j][i] == 6) | (jugadores[j][i] == 7) | (jugadores[j][i] == 8) | (jugadores[j][i] == 9) )){
 
                     identificador = jugadores[tiledY][tiledX];//identifico el personaje al que quiero atacar
                         
@@ -482,7 +482,7 @@
 
             for (var i=0; i < 10; i++){
                 for (var j= 0; j<10 ; j++){
-                    if((Math.abs(i - actualTiledX) + Math.abs(j - actualTiledY) <= personajeSeleccionado.getRange()) && (jugadores[j][i] != 1)  && ((i == tiledX)&(j == tiledY)) && ( (jugadores[j][i] == 2) | (jugadores[j][i] == 3) | (jugadores[j][i] == 4) | (jugadores[j][i] == 5) )){
+                    if((Math.abs(i - actualTiledX) + Math.abs(j - actualTiledY) <= personajeSeleccionado.getRange()) /*&& (jugadores[j][i] != 1) */ && ((i == tiledX)&(j == tiledY)) && ( (jugadores[j][i] == 1) | (jugadores[j][i] == 2) | (jugadores[j][i] == 3) | (jugadores[j][i] == 4) | (jugadores[j][i] == 5) )){
 
                     identificador = jugadores[tiledY][tiledX];
                         
@@ -672,6 +672,11 @@
                         
                         alien1.setSprite('AlienQueenClick');
                         
+                        //Muestro los datos del personaje seleccionado
+                        textoInfo.x = (coordX * 100);
+                        textoInfo.y = (coordY * 60)+60;
+                        textoInfo.setText( ""+ personajeSeleccionado.getNombre() +" : " + personajeSeleccionado.getLife());
+
                         break;
                     case 3:
                         alien1.setSprite('AlienQueen');
@@ -685,6 +690,11 @@
                         personajeSeleccionado = alien2;
                         
                         alien2.setSprite('SpitterClick');
+                        
+                        //Muestro los datos del personaje seleccionado
+                        textoInfo.x = (coordX * 100);
+                        textoInfo.y = (coordY * 60)+60;
+                        textoInfo.setText( ""+ personajeSeleccionado.getNombre() +" : " + personajeSeleccionado.getLife());
                         
                         break;
                     case 4:
@@ -700,6 +710,11 @@
                         
                         alien3.setSprite('ClawsClick');
                         
+                        //Muestro los datos del personaje seleccionado
+                        textoInfo.x = (coordX * 100);
+                        textoInfo.y = (coordY * 60)+60;
+                        textoInfo.setText( ""+ personajeSeleccionado.getNombre() +" : " + personajeSeleccionado.getLife());
+                        
                         break;
                     case 5:
                         alien1.setSprite('AlienQueen');
@@ -713,6 +728,11 @@
                         personajeSeleccionado = alien4;
                         
                         alien4.setSprite('ChargerClick');
+                        
+                        //Muestro los datos del personaje seleccionado
+                        textoInfo.x = (coordX * 100);
+                        textoInfo.y = (coordY * 60)+60;
+                        textoInfo.setText( ""+ personajeSeleccionado.getNombre() +" : " + personajeSeleccionado.getLife());
                         
                         break;
                     default:
@@ -733,6 +753,12 @@
                         personajeSeleccionado = marine1;
                         
                         marine1.setSprite('KingClick');
+                        
+                        //Muestro los datos del personaje seleccionado
+                        textoInfo.x = (coordX * 100);
+                        textoInfo.y = (coordY * 60)+60;
+                        textoInfo.setText( ""+ personajeSeleccionado.getNombre() +" : " + personajeSeleccionado.getLife());
+                        
                         break;
                     case 7:
                         alien1.setSprite('AlienQueen');
@@ -746,6 +772,12 @@
                         personajeSeleccionado = marine2;
                         
                         marine2.setSprite('TankClick');
+                        
+                        //Muestro los datos del personaje seleccionado
+                        textoInfo.x = (coordX * 100);
+                        textoInfo.y = (coordY * 60)+60;
+                        textoInfo.setText( ""+ personajeSeleccionado.getNombre() +" : " + personajeSeleccionado.getLife());
+                        
                         break;
                     case 8:
                         alien1.setSprite('AlienQueen');
@@ -759,6 +791,12 @@
                         personajeSeleccionado = marine3;
                         
                         marine3.setSprite('MarineClick');
+                        
+                        //Muestro los datos del personaje seleccionado
+                        textoInfo.x = (coordX * 100);
+                        textoInfo.y = (coordY * 60)+60;
+                        textoInfo.setText( ""+ personajeSeleccionado.getNombre() +" : " + personajeSeleccionado.getLife());
+                        
                         break;
                     case 9:
                         alien1.setSprite('AlienQueen');
@@ -772,6 +810,12 @@
                         personajeSeleccionado = marine4;
                         
                         marine4.setSprite('RangerClick');
+                        
+                        //Muestro los datos del personaje seleccionado
+                        textoInfo.x = (coordX * 100);
+                        textoInfo.y = (coordY * 60)+60;
+                        textoInfo.setText( ""+ personajeSeleccionado.getNombre() +" : " + personajeSeleccionado.getLife());
+                        
                         break;
 
                     default:
@@ -784,10 +828,6 @@
         }
         
         if(personajeSeleccionado != null){//Si he seleccionado un personaje
-            //Muestro los datos del personaje seleccionado
-            textoInfo.x = (coordX * 100);
-            textoInfo.y = (coordY * 60)+60;
-            textoInfo.setText( ""+ personajeSeleccionado.getNombre() +" : " + personajeSeleccionado.getLife());
             
             //Activo y desactivo botones según las acciones que haya realizado
             if(!personajeSeleccionado.getHasMoved()){ 

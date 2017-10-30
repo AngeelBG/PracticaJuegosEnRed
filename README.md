@@ -51,4 +51,4 @@
   
 ## _Diagrama_:
 
-  ![alt text](https://github.com/AngeelBG/PracticaJuegosEnRed/blob/master/Pantallazos/Diagrama.PNG)
+  ![alt text](https://github.com/AngeelBG/PracticaJuegosEnRed/blob/master/Pantallazos/Diagrama.png)

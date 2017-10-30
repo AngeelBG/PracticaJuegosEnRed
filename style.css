@@ -102,7 +102,7 @@ span.crosshair {
   background-image:url(assets/BotonRankingHover.png);
   background-repeat:no-repeat;
   height:114px;
-  width:366px
+  width:366px;
   background-position:center;
 }
 
@@ -128,7 +128,7 @@ span.crosshair {
   background-image:url(assets/BotonPersonajesHover.png);
   background-repeat:no-repeat;
   height:114px;
-  width:366px
+  width:366px;
   background-position:center;
 }
 
@@ -248,7 +248,7 @@ span.crosshair {
 
 .botonFin {
 
-  display:none;
+
   background: transparent;
   border: none;
   background-image:url(assets/BotonFin.png);
@@ -267,6 +267,81 @@ span.crosshair {
 }
 
 .botonFin:active {
+	position:relative;
+	top:1px;
+	font-size: 130%;
+
+}
+
+.botonRendirse {
+  background: transparent;
+  border: none;
+  background-image:url(assets/BotonRendirse.png);
+  background-repeat:no-repeat;
+  height:60px;
+  width:100px;
+  background-position:center;
+}
+
+.botonRendirse:hover {
+  background-image:url(assets/BotonRendirseHover.png);
+  background-repeat:no-repeat;
+  height:60px;
+  width:100px;
+  background-position:center;
+}
+
+.botonRendirse:active {
+	position:relative;
+	top:1px;
+	font-size: 130%;
+
+}
+
+.botonAliens {
+  background: transparent;
+  border: none;
+  background-image:url(assets/BotonAliens.png);
+  background-repeat:no-repeat;
+  height:285px;
+  width:366px;
+  background-position:center;
+}
+
+.botonAliens:hover {
+  background-image:url(assets/BotonAliensHover.png);
+  background-repeat:no-repeat;
+  height:285px;
+  width:366px;
+  background-position:center;
+}
+
+.botonAliens:active {
+	position:relative;
+	top:1px;
+	font-size: 130%;
+
+}
+
+.botonMarines {
+  background: transparent;
+  border: none;
+  background-image:url(assets/BotonMarines.png);
+  background-repeat:no-repeat;
+  height:285px;
+  width:366px;
+  background-position:center;
+}
+
+.botonMarines:hover {
+  background-image:url(assets/BotonMarinesHover.png);
+  background-repeat:no-repeat;
+  height:285px;
+  width:366px;
+  background-position:center;
+}
+
+.botonMarines:active {
 	position:relative;
 	top:1px;
 	font-size: 130%;

@@ -51,26 +51,21 @@
         var textoInfoAtaque;
         var pos;
         var marker;
-        var player1;
-        var player2;
         var tiledX;
         var tiledY;
         var personajeSeleccionado;
         var personajeAtacado;
-        var turno = 0;
+        var turno;
+        var usuarios = [];
+        var ranking = [];
 
         const ANCHOMAPA = 10;
         const ALTOMAPA = 10;
 
 
     function preload() {
-        //game.load.image('1', 'assets/TileG.png');
-        //game.load.image('2', 'assets/TileN.png');
+
         game.load.image('player1', 'assets/PLayer1.png');
-        game.load.image('player1click', 'assets/PLayer1Click.png');
-        game.load.image('Spitter', 'assets/Spitter.png');
-        game.load.image('SpitterClick', 'assets/SpitterClick.png');
-        
         game.load.image('1', 'assets/Cesped.png');
         game.load.image('2', 'assets/roca.png');
         game.load.image('atacar', 'assets/Atacada.png');
@@ -81,14 +76,80 @@
         game.load.image('AlienQueenClick', 'assets/AlienQueenClick.png');
         game.load.image('Spitter', 'assets/Spitter.png');
         game.load.image('SpitterClick', 'assets/SpitterClick.png');
+        game.load.image('Claws', 'assets/Claws.png');
+        game.load.image('ClawsClick', 'assets/ClawsClick.png');
+        game.load.image('Charger', 'assets/Charger.png');
+        game.load.image('ChargerClick', 'assets/ChargerClick.png');
         
         game.load.image('King', 'assets/King.png');
         game.load.image('KingClick', 'assets/KingClick.png');
         game.load.image('Tank', 'assets/Tank.png');
         game.load.image('TankClick', 'assets/TankClick.png');
-        //game.load.image('prueba', 'assets/Prueba.png');
+        game.load.image('Marine', 'assets/Marine.png');
+        game.load.image('MarineClick', 'assets/MarineClick.png');
+        game.load.image('Ranger', 'assets/Ranger.png');
+        game.load.image('RangerClick', 'assets/RangerClick.png');
         
     }
+
+    function Usuario (id, puntos){
+        var id = id;
+        var puntos = puntos;
+        
+        this.getId = function () {
+            return id;
+        };
+        
+        this.getPuntos = function () {
+            return puntos;
+        };
+        
+        this.setPuntos = function (nuevosPuntos) {
+            puntos = nuevosPuntos;
+        };
+  
+    }
+    
+    //compruebo si el nombre del usuario está libre
+    function usuarioValido(nuevoNombre){
+        for (var i=0; i < usuarios.length; i++){
+            if (usuarios[i].getId() == nuevoNombre) return false;
+        }
+        return true;
+    }
+    
+    //compruebo si el usuario ganador está entre los mejores
+    function usuarioGanador(usuario){
+        for (var i=0; i < usuarios.length; i++){
+            if (usuarios[i].getPuntos() <= usuario.getPuntos()) ranking.push(usuario);
+        }
+    }
+
+    //ordena el array por el metodo de la burbuja
+    function ordenarRanking(ranking){
+		for(var i=1;i<ranking.length;i++){
+			for(var j=0;j<(ranking.length-i);j++){
+				if(ranking[j].getPuntos() >ranking[j+1].getPuntos()){
+					var aux = ranking[j+1];
+					ranking[j+1] = ranking[j];
+					ranking[j] = aux;
+				}
+			}
+		}
+		return ranking;
+	}
+
+    //carga la clasificacion
+    function cargarClasificacion(arrayRanking) {
+        $("#Ranking")
+                .html(
+                    '<thead><th style ="width:60%">Jugador</th><th>Puntos</th></tr></thead>');
+        for (var i = 0; i < ranking.length; i++) {
+            $("#Ranking").append(
+                    "</td> <td>" + arrayRanking[i].getId() + "</td> <td>" + arrayRanking[i].getPuntos() + "</tr></td></tbody>");
+        }
+    }
+
     function Tropa (nombre, sprite, x, y, mov, ataque, vida, rang, id){
 
         var tropa = game.add.sprite(x, y, sprite);
@@ -204,18 +265,26 @@
         }
 
         //arrayPersonajes[0] = new Tropa ('alien', 'player1', 5*anchoTile, 5*altoTile, 2, 2, 20);
-        alien1 = new Tropa ('AlienQueen', 'AlienQueen', 4*anchoTile, 0*altoTile, 6, 200, 150, 1, 2);
+        alien1 = new Tropa ('Alien Queen', 'AlienQueen', 4*anchoTile, 0*altoTile, 2, 40, 150, 1, 2);
         alien2 = new Tropa ('Spitter', 'Spitter', 6*anchoTile, 1*altoTile, 2, 20, 70, 4, 3);
+        alien3 = new Tropa ('Claws', 'Claws', 4*anchoTile, 2*altoTile, 3, 30, 80, 1, 4);
+        alien4 = new Tropa ('Charger', 'Charger', 2*anchoTile, 1*altoTile, 1, 20, 200, 1, 5);
         
         marine1 = new Tropa ('King', 'King', 4*anchoTile, 9*altoTile, 2, 30, 120, 2, 6);
-        marine2 = new Tropa ('Tank', 'Tank', 6*anchoTile, 9*altoTile, 1, 25, 180, 1, 7);
+        marine2 = new Tropa ('Tank', 'Tank', 6*anchoTile, 8*altoTile, 1, 25, 180, 1, 7);
+        marine3 = new Tropa ('Marine', 'Marine', 4*anchoTile, 7*altoTile, 3, 25, 100, 1, 8);
+        marine4 = new Tropa ('Ranger', 'Ranger', 2*anchoTile, 8*altoTile, 1, 20, 80, 3, 9);
         
         jugadores[0][4] = 2;
         jugadores[1][6] = 3;
+        jugadores[2][4] = 4;
+        jugadores[1][2] = 5;
         
         
         jugadores[9][4] = 6;
-        jugadores[9][6] = 7;
+        jugadores[8][6] = 7;
+        jugadores[7][4] = 8;
+        jugadores[8][2] = 9;
 
         
         textoTurno = game.add.text(280, 30, '', { fill: '#CCEEFF' });
@@ -233,35 +302,45 @@
         textoInfoAtaque.stroke = '#000000';
         textoInfoAtaque.strokeThickness = 2;
         
-        if (turno % 2 == 0){
+        /*if (turno % 2 == 0){
             textoTurno.text = "Turno de los Aliens";
             setTimeout(function(){ textoTurno.setText(""); }, 3000);
             alien1.setOpacity(1);
             alien2.setOpacity(1);
+            alien3.setOpacity(1);
+            alien4.setOpacity(1);
             marine1.setOpacity(0.7);
             marine2.setOpacity(0.7);
+            marine3.setOpacity(0.7);
+            marine4.setOpacity(0.7);
         }else{
             textoTurno.x = 250;
             textoTurno.text = "Turno de los Space Marines";
             setTimeout(function(){ textoTurno.setText(""); }, 3000);
             alien1.setOpacity(0.7);
             alien2.setOpacity(0.7);
+            alien3.setOpacity(0.7);
+            alien4.setOpacity(0.7);
             marine1.setOpacity(1);
             marine2.setOpacity(1);
-        }
+            marine3.setOpacity(1);
+            marine4.setOpacity(1);
+        }*/
 
         game.input.onDown.add(listener, this);
 
   
     }
 
+    //Funcion para cuando toca el turno de los aliens
    function atacarAliens(pointer){
 
         if((counter2 != 1) ){
             //Tile a la que quiero atacar
             tiledX = Math.floor(pointer.x/(100));
             tiledY = Math.floor(pointer.y/(60));
-
+            
+            //Tile en la que se encuentra el personaje
             actualTiledX = Math.floor(personajeSeleccionado.getX()/(100));
             actualTiledY = Math.floor(personajeSeleccionado.getY()/(60));
 
@@ -270,9 +349,10 @@
 
             for (var i=0; i < 10; i++){
                 for (var j= 0; j<10 ; j++){
+                    //Compruebo las casillas a las que puedo atacar, y si hay un personaje enemigo en ella.
                     if((Math.abs(i - actualTiledX) + Math.abs(j - actualTiledY) <= personajeSeleccionado.getRange()) && (jugadores[j][i] != 1)  && ((i == tiledX)&(j == tiledY)) && ( (jugadores[j][i] == 6) | (jugadores[j][i] == 7) | (jugadores[j][i] == 8) | (jugadores[j][i] == 9) )){
 
-                    identificador = jugadores[tiledY][tiledX];
+                    identificador = jugadores[tiledY][tiledX];//identifico el personaje al que quiero atacar
                         
                         switch(identificador) {
                             case 6:
@@ -284,18 +364,28 @@
                                     marine1.setSprite('eliminado');
                                     setTimeout(function(){ marine1.kill(); }, 1000);
                                     
-                                    //jugadores[tiledY][tiledX] = 1;
                                     ///////////////GAME OVER
                                     game.world.removeAll();
                                     text = game.add.text(170, 225, '', { fill: '#ffffff' });
                                     text.fontSize = 70;
                                     text.text = "GANAN LOS ALIENS";
                                     
+                                    var textUser = game.add.text(200, 400, '', { fill: '#ffffff' });
+                                    textUser.fontSize = 30;
+                                    newUser.setPuntos(1);
+                                    textUser.text = "Usuario: "+ newUser.getId() +" +1p. Total: "+ newUser.getPuntos();
+                                    
+                                    usuarioGanador(newUser);
+                                    ordenarRanking(ranking);
+                                    cargarClasificacion(ranking);
+                                    ponerVisible($("#imagenRanking"), false);
+                                    
                                     var button = game.add.button(390, 300, 'button', actionOnClick, this, 0, 0, 0);
                                     ponerVisibleButton($("#Bmover"), false);
                                     ponerVisibleButton($("#Batacar"), false);
                                     ponerVisibleButton($("#Besperar"), false);
                                     ponerVisibleButton($("#Bfin"), false);
+                                    ponerVisibleButton($("#Brendirse"), false);
                                     
                                     jugadores[j][i] = 1;
                                 }
@@ -313,9 +403,35 @@
                                     
                                 } 
                                 break;
+                            case 8:
+                                marine3.setOpacity(1);
+                                setTimeout(function(){ marine3.setOpacity(0.5); }, 1000);                                
+                                
+                                marine3.setLife(personajeSeleccionado.getDamage());
+                                if(marine3.getLife()<=0){
+                                    marine3.setSprite('eliminado');
+                                    setTimeout(function(){ marine3.kill();  }, 1000);
+                                    jugadores[j][i] = 1;
+                                    
+                                } 
+                                break;
+                                
+                            case 9:
+                                marine4.setOpacity(1);
+                                setTimeout(function(){ marine4.setOpacity(0.5); }, 1000);                                
+                                
+                                marine4.setLife(personajeSeleccionado.getDamage());
+                                if(marine4.getLife()<=0){
+                                    marine4.setSprite('eliminado');
+                                    setTimeout(function(){ marine4.kill();  }, 1000);
+                                    jugadores[j][i] = 1;
+                                    
+                                } 
+                                break;
                             default:
                         }
                         
+                        //Muestro feedback del ataque
                         textoInfoAtaque.x = (tiledX * 100);
                         textoInfoAtaque.y = (tiledY * 60)+60;
                         textoInfoAtaque.setText("-"+personajeSeleccionado.getDamage());
@@ -328,12 +444,13 @@
                         if (!personajeSeleccionado.getHasMoved()) cambioEstadoBloqueado($("#Bmover"),true);
                         cambioEstadoBloqueado($("#Besperar"),true);
                         cambioEstadoBloqueado($("#Bfin"),true);
-
+                        
+                        //Vuelvo las tiles del color original
                         for (var k=0; k < 10; k++){
                             for (var l= 0; l <10 ; l++){
                                 if((Math.abs(k - posicionX) + Math.abs(l - posicionY) <= personajeSeleccionado.getRange())){
-                                    var tileType = mapa[l][k];
-                                    tiles[l][k].loadTexture(tileType, 0);
+                                    var tileType = mapa[l][k]; //localizo la tile original
+                                    tiles[l][k].loadTexture(tileType, 0);// la pinto
 
                                 }              
                             }
@@ -347,13 +464,15 @@
         }
         
     }
-
+    
+    ///Misma funcion que la anterior, pero para cuando atacan los Marines
    function atacarMarines(pointer){
 
         if((counter2 != 1) ){
-            //Tile a la que quiero atacar
+
             tiledX = Math.floor(pointer.x/(100));
             tiledY = Math.floor(pointer.y/(60));
+            
 
             actualTiledX = Math.floor(personajeSeleccionado.getX()/(100));
             actualTiledY = Math.floor(personajeSeleccionado.getY()/(60));
@@ -376,17 +495,30 @@
                                 if(alien1.getLife()<=0) {
                                     alien1.setSprite('eliminado');
                                     setTimeout(function(){ alien1.kill();  }, 1000);
-                                    //jugadores[tiledY][tiledX] = 1;
+
                                     ///////////////GAME OVER
                                     game.world.removeAll();
-                                    text = game.add.text(500, 500, '', { fill: '#ffffff' });
+                                    text = game.add.text(170, 225, '', { fill: '#ffffff' });
+                                    text.fontSize = 70;
                                     text.text = "GANAN LOS MARINES";
                                     
+                                    var textUser = game.add.text(200, 400, '', { fill: '#ffffff' });
+                                    textUser.fontSize = 30;
+                                    newUser.setPuntos(1);
+                                    textUser.text = "Usuario: "+ newUser.getId() +" +1p. Total: "+ newUser.getPuntos();
 
+                                    usuarioGanador(newUser);
+                                    ordenarRanking(ranking);
+                                    cargarClasificacion(ranking);
+                                    ponerVisible($("#imagenRanking"), false);
+                                    
+                                    var button = game.add.button(390, 300, 'button', actionOnClick, this, 0, 0, 0);
                                     ponerVisibleButton($("#Bmover"), false);
                                     ponerVisibleButton($("#Batacar"), false);
                                     ponerVisibleButton($("#Besperar"), false);
                                     ponerVisibleButton($("#Bfin"), false);
+                                    ponerVisibleButton($("#Brendirse"), false);
+                                    
                                     jugadores[j][i] = 1;
                                 }
                                 
@@ -399,6 +531,30 @@
                                 if(alien2.getLife()<=0){
                                     alien2.setSprite('eliminado');
                                     setTimeout(function(){ alien2.kill();  }, 1000);
+                                    jugadores[j][i] = 1;
+                                    
+                                } 
+                                break;
+                            case 4:
+                                alien3.setOpacity(1);
+                                setTimeout(function(){ alien3.setOpacity(0.5); }, 1000);                                
+                                
+                                alien3.setLife(personajeSeleccionado.getDamage());
+                                if(alien3.getLife()<=0){
+                                    alien3.setSprite('eliminado');
+                                    setTimeout(function(){ alien3.kill();  }, 1000);
+                                    jugadores[j][i] = 1;
+                                    
+                                } 
+                                break;
+                            case 5:
+                                alien4.setOpacity(1);
+                                setTimeout(function(){ alien4.setOpacity(0.5); }, 1000);                                
+                                
+                                alien4.setLife(personajeSeleccionado.getDamage());
+                                if(alien4.getLife()<=0){
+                                    alien4.setSprite('eliminado');
+                                    setTimeout(function(){ alien4.kill();  }, 1000);
                                     jugadores[j][i] = 1;
                                     
                                 } 
@@ -438,6 +594,7 @@
         
     }
 
+    //Funcion que mueve los personajes por la pantalla
     function moveSprite(pointer) {
         
         if((counter != 1) && (personajeSeleccionado != null)){
@@ -445,6 +602,7 @@
             tiledX = Math.floor(pointer.x/(100));
             tiledY = Math.floor(pointer.y/(60));
 
+            //Tile que contiene la posicion del personaje seleccionado
             actualTiledX = Math.floor(personajeSeleccionado.getX()/(100));
             actualTiledY = Math.floor(personajeSeleccionado.getY()/(60));
 
@@ -453,20 +611,25 @@
 
             for (var i=0; i < 10; i++){
                 for (var j= 0; j<10 ; j++){
+                    //Compruebo las casillas a las cuales me puedo mover, evitando el movimiento en diagonal
                     if((Math.abs(i - actualTiledX) + Math.abs(j - actualTiledY) <= personajeSeleccionado.mov()) && (mapa[j][i]!=2) && (jugadores[j][i] == 1) && ((i == tiledX)&(j == tiledY))){
+                        //Muevo el personaje y dejo libre la posicion de la matriz
                         personajeSeleccionado.mover(tiledX*100,tiledY*60);
                         jugadores[tiledY][tiledX] = personajeSeleccionado.getNumeral();
                         jugadores[posicionY][posicionX] = 1;
                         personajeSeleccionado.setHasMoved(true);
+                        
+                        //Muestro informacion de la vida y el nombre del personaje
                         textoInfo.x = (tiledX * 100);
                         textoInfo.y = (tiledY * 60)+60;
 
                         counter++;
-                        //text.destroy();
+
                         if (!personajeSeleccionado.getHasAttacked()) cambioEstadoBloqueado($("#Batacar"),true);
                         cambioEstadoBloqueado($("#Besperar"),true);
                         cambioEstadoBloqueado($("#Bfin"),true);
-
+                        
+                        //Vuelvo a pintar las tiles de su color original
                         for (var k=0; k < 10; k++){
                             for (var l= 0; l <10 ; l++){
                                 if((Math.abs(k - posicionX) + Math.abs(l - posicionY) <= personajeSeleccionado.mov())){
@@ -486,29 +649,70 @@
 
 }
 
+    //Funcion que recoge los clicks sobre la pantalla de juego, para saber si hemos pulsado o no sobre un personaje y cuál.
     function listener (pointer) {
         if ((counter != 0) && (counter2 !=0)){
             coordX = Math.floor(pointer.x/(100));
             coordY = Math.floor(pointer.y/(60));
 
-            identificador = jugadores[coordY][coordX];
-            
+            identificador = jugadores[coordY][coordX];  //Identifico el personaje clickado
+                                                        //Y cambio el sprite a seleccionado y deselecciono el resto
             if(turno % 2 == 0){
                 switch(identificador) {
                     case 2:
                         alien2.setSprite('Spitter');
+                        alien3.setSprite('Claws');
+                        alien4.setSprite('Charger');
                         marine1.setSprite('King');
                         marine2.setSprite('Tank');
+                        marine3.setSprite('Marine');
+                        marine4.setSprite('Ranger');
+                        
                         personajeSeleccionado = alien1;
+                        
                         alien1.setSprite('AlienQueenClick');
                         
                         break;
                     case 3:
                         alien1.setSprite('AlienQueen');
+                        alien3.setSprite('Claws');
+                        alien4.setSprite('Charger');
                         marine1.setSprite('King');
                         marine2.setSprite('Tank');
+                        marine3.setSprite('Marine');
+                        marine4.setSprite('Ranger');
+                        
                         personajeSeleccionado = alien2;
+                        
                         alien2.setSprite('SpitterClick');
+                        
+                        break;
+                    case 4:
+                        alien1.setSprite('AlienQueen');
+                        alien2.setSprite('Spitter');
+                        alien4.setSprite('Charger');
+                        marine1.setSprite('King');
+                        marine2.setSprite('Tank');
+                        marine3.setSprite('Marine');
+                        marine4.setSprite('Ranger');
+                        
+                        personajeSeleccionado = alien3;
+                        
+                        alien3.setSprite('ClawsClick');
+                        
+                        break;
+                    case 5:
+                        alien1.setSprite('AlienQueen');
+                        alien2.setSprite('Spitter');
+                        alien3.setSprite('Claws');
+                        marine1.setSprite('King');
+                        marine2.setSprite('Tank');
+                        marine3.setSprite('Marine');
+                        marine4.setSprite('Ranger');
+                        
+                        personajeSeleccionado = alien4;
+                        
+                        alien4.setSprite('ChargerClick');
                         
                         break;
                     default:
@@ -518,21 +722,56 @@
             } else {
                 switch(identificador) {
                     case 6:
-                        marine2.setSprite('Tank');
                         alien1.setSprite('AlienQueen');
                         alien2.setSprite('Spitter');
+                        alien3.setSprite('Claws');
+                        alien4.setSprite('Charger');
+                        marine2.setSprite('Tank');
+                        marine3.setSprite('Marine');
+                        marine4.setSprite('Ranger');
+                        
                         personajeSeleccionado = marine1;
+                        
                         marine1.setSprite('KingClick');
-
                         break;
                     case 7:
-                        marine1.setSprite('King');
                         alien1.setSprite('AlienQueen');
                         alien2.setSprite('Spitter');
+                        alien3.setSprite('Claws');
+                        alien4.setSprite('Charger');
+                        marine1.setSprite('King');
+                        marine3.setSprite('Marine');
+                        marine4.setSprite('Ranger');
+                        
                         personajeSeleccionado = marine2;
+                        
                         marine2.setSprite('TankClick');
-
-
+                        break;
+                    case 8:
+                        alien1.setSprite('AlienQueen');
+                        alien2.setSprite('Spitter');
+                        alien3.setSprite('Claws');
+                        alien4.setSprite('Charger');
+                        marine1.setSprite('King');
+                        marine2.setSprite('Tank');
+                        marine4.setSprite('Ranger');
+                        
+                        personajeSeleccionado = marine3;
+                        
+                        marine3.setSprite('MarineClick');
+                        break;
+                    case 9:
+                        alien1.setSprite('AlienQueen');
+                        alien2.setSprite('Spitter');
+                        alien3.setSprite('Claws');
+                        alien4.setSprite('Charger');
+                        marine1.setSprite('King');
+                        marine2.setSprite('Tank');
+                        marine3.setSprite('Marine');
+                        
+                        personajeSeleccionado = marine4;
+                        
+                        marine4.setSprite('RangerClick');
                         break;
 
                     default:
@@ -544,11 +783,13 @@
             }
         }
         
-        if(personajeSeleccionado != null){
+        if(personajeSeleccionado != null){//Si he seleccionado un personaje
+            //Muestro los datos del personaje seleccionado
             textoInfo.x = (coordX * 100);
             textoInfo.y = (coordY * 60)+60;
             textoInfo.setText( ""+ personajeSeleccionado.getNombre() +" : " + personajeSeleccionado.getLife());
             
+            //Activo y desactivo botones según las acciones que haya realizado
             if(!personajeSeleccionado.getHasMoved()){ 
                 cambioEstadoBloqueado($("#Bmover"),true); 
                 cambioEstadoBloqueado($("#Besperar"),true);
@@ -562,11 +803,16 @@
             ponerVisibleButton($("#Besperar"), true);
             ponerVisibleButton($("#Bfin"), true);
         }else{
+            //Al no haber clickeado ningun personaje, deselecciono todos, y quito los botones
             textoInfo.setText("");
-            marine2.setSprite('Tank');
             alien1.setSprite('AlienQueen');
             alien2.setSprite('Spitter');
+            alien3.setSprite('Claws');
+            alien4.setSprite('Charger');
             marine1.setSprite('King');
+            marine2.setSprite('Tank');
+            marine3.setSprite('Marine');
+            marine4.setSprite('Ranger');
             ponerVisibleButton($("#Bmover"), false);
             ponerVisibleButton($("#Batacar"), false);
             ponerVisibleButton($("#Besperar"), false);
@@ -576,6 +822,7 @@
 
     }
 
+    //Funcion del boton de GAME OVER
     function actionOnClick () {
 
         ponerVisible($("#menu"), true);
@@ -585,19 +832,6 @@
 
     function update() {
         
-        game.debug.inputInfo(32, 32);
-        //pos = game.input.activePointer.position;
-        //updateMarker();
-        //var movimiento = arrayPersonajes[0].getX();
-        //game.debug.text("PlayerX:" + player1.x + " PlayerY:" + player1.y + "TileX:" + tiledX + " TileY:" + tiledY + " P: ", 180, 200);
-        //game.debug.text("Turno:" + turno, 180, 200);
-        
-        /*if (game.input.activePointer.isDown)
-        {
-            listener(this);
-        }*/
-
-
     }
 
 
@@ -636,25 +870,19 @@ function cambioEstadoBloqueado(boton, nuevoEstado){
 
 // funcion que se invoca al cargar la pagina
 $(function() {
-	
-	//cambioEstadoBloqueado($("#Bstart"),false);//////////////////////////////////////////////////////////// REVISAR
     
+    // BOTONES MENUS DEL JUEGO 
     $("#Bjugar").click(
 			function() {
                     ponerVisible($("#menu"), false);
-                    ponerVisible($("#menuJugar"), true);
+                    ponerVisible($("#menuUsuario"), true);
                 
 				})
-                
-	
-    
     $("#Binstrucciones").click(
 			function() {
                     ponerVisible($("#menu"), false);
                     ponerVisible($("#menuInstrucciones"), true);
 				})
-                
-	
     
     $("#Branking").click(
 			function() {
@@ -666,6 +894,65 @@ $(function() {
 			function() {
                     ponerVisible($("#menu"), false);
                     ponerVisible($("#menuPersonajes"), true);
+				})
+    
+    $("#Baliens").click(
+			function() {
+                    
+                    var nombreUsuario = document.getElementById("apodo").value;
+                
+                    if ( (usuarioValido(nombreUsuario)) && (nombreUsuario != "")) {
+                        newUser = new Usuario(nombreUsuario, 0);
+                        usuarios.push(newUser);
+                        $("#apodoDuplicado").html("");
+                        ponerVisible($("#menuJugar"), true);
+                        ponerVisible($("#menuUsuario"), false);
+                    } else {
+                        if (!(usuarioValido(nombreUsuario))) $("#apodoDuplicado").html("El nick ya está cogido");
+                        if ((nombreUsuario == "")) $("#apodoDuplicado").html("El nick no puede estar vacío");
+                    }
+                
+                    textoTurno.text = "Turno de los Aliens";
+                    setTimeout(function(){ textoTurno.setText(""); }, 3000);
+                    alien1.setOpacity(1);
+                    alien2.setOpacity(1);
+                    alien3.setOpacity(1);
+                    alien4.setOpacity(1);
+                    marine1.setOpacity(0.7);
+                    marine2.setOpacity(0.7);
+                    marine3.setOpacity(0.7);
+                    marine4.setOpacity(0.7);
+                    turno = 0;
+				})
+    
+    $("#Bmarines").click(
+			function() {
+                
+                    var nombreUsuario = document.getElementById("apodo").value;
+                
+                    if ( (usuarioValido(nombreUsuario)) && (nombreUsuario != "")) {
+                        newUser = new Usuario(nombreUsuario, 0);
+                        usuarios.push(newUser);
+                        $("#apodoDuplicado").html("");
+                        ponerVisible($("#menuJugar"), true);
+                        ponerVisible($("#menuUsuario"), false);
+                    } else {
+                        if (!(usuarioValido(nombreUsuario))) $("#apodoDuplicado").html("El nick ya está cogido");
+                        if ((nombreUsuario == "")) $("#apodoDuplicado").html("El nick no puede estar vacío");
+                    }
+                
+                    textoTurno.x = 250;
+                    textoTurno.text = "Turno de los Space Marines";
+                    setTimeout(function(){ textoTurno.setText(""); }, 3000);
+                    alien1.setOpacity(0.7);
+                    alien2.setOpacity(0.7);
+                    alien3.setOpacity(0.7);
+                    alien4.setOpacity(0.7);
+                    marine1.setOpacity(1);
+                    marine2.setOpacity(1);
+                    marine3.setOpacity(1);
+                    marine4.setOpacity(1);
+                    turno = 1;
 				})
     $("#BatrasIns").click(
 			function() {
@@ -682,6 +969,8 @@ $(function() {
                     ponerVisible($("#menu"), true);
                     ponerVisible($("#menuPersonajes"), false);
 				})
+    
+    // BOTONES DE LA ZONA DE JUEGO 
     $("#Bmover").click(
 			function() {
                     counter = 0;
@@ -754,8 +1043,9 @@ $(function() {
                     personajeSeleccionado.setHasAttacked(true);
                     cambioEstadoBloqueado($("#Besperar"),false);
                     textoInfo.setText("");
-                    //counter2 = 0;
-                    //counter = 0;
+                    
+                    //Pinto los tiles de su color original, por si se da el caso de que alguien haya pulsado un boton y no haya realizado
+                    //la accion, quedandose el mapa pintado.
                     for (var k=0; k < 10; k++){
                          for (var l= 0; l <10 ; l++){
                             var tileType = mapa[l][k];
@@ -765,27 +1055,42 @@ $(function() {
 				})
     
     $("#Bfin").click(
-			function() {
-                    //counter2 = 0;
-                    //counter = 0;
-                
+            function() {
+                    //Restauro las acciones
                     if(turno % 2 == 0){
                         alien1.setHasMoved(false);
                         alien2.setHasMoved(false);
+                        alien3.setHasMoved(false);
+                        alien4.setHasMoved(false);
                         alien1.setHasAttacked(false);
                         alien2.setHasAttacked(false);
+                        alien3.setHasAttacked(false);
+                        alien4.setHasAttacked(false);
+                        
                     } else {
                         marine1.setHasMoved(false);
                         marine2.setHasMoved(false);
+                        marine3.setHasMoved(false);
+                        marine4.setHasMoved(false);
                         marine1.setHasAttacked(false);
                         marine2.setHasAttacked(false);
+                        marine3.setHasAttacked(false);
+                        marine4.setHasAttacked(false);
                     }
+                
                     turno++;
+                
+                    //Deselecciono los sprites
+                    alien1.setSprite('AlienQueen');
                     alien2.setSprite('Spitter');
+                    alien3.setSprite('Claws');
+                    alien4.setSprite('Charger');
                     marine1.setSprite('King');
                     marine2.setSprite('Tank');
-                    alien1.setSprite('AlienQueen');
+                    marine3.setSprite('Marine');
+                    marine4.setSprite('Ranger');
                 
+                    //Desactivo botones
                     cambioEstadoBloqueado($("#Batacar"),true);
                     cambioEstadoBloqueado($("#Bmover"),true);
                     cambioEstadoBloqueado($("#Besperar"),true);
@@ -802,8 +1107,12 @@ $(function() {
                         setTimeout(function(){ textoTurno.setText(""); }, 3000);
                         alien1.setOpacity(1);
                         alien2.setOpacity(1);
+                        alien3.setOpacity(1);
+                        alien4.setOpacity(1);
                         marine1.setOpacity(0.7);
                         marine2.setOpacity(0.7);
+                        marine3.setOpacity(0.7);
+                        marine4.setOpacity(0.7);
 
                     }else{
                         textoTurno.x = 230;
@@ -811,8 +1120,63 @@ $(function() {
                         setTimeout(function(){ textoTurno.setText(""); }, 3000);
                         alien1.setOpacity(0.7);
                         alien2.setOpacity(0.7);
+                        alien3.setOpacity(0.7);
+                        alien4.setOpacity(0.7);
                         marine1.setOpacity(1);
                         marine2.setOpacity(1);
+                        marine3.setOpacity(1);
+                        marine4.setOpacity(1);
+                    }
+				})
+    
+    $("#Brendirse").click(
+			function() {
+                    if(turno % 2 == 0){
+                        ///////////////GAME OVER
+                        game.world.removeAll();
+                        text = game.add.text(170, 225, '', { fill: '#ffffff' });
+                        text.fontSize = 70;
+                        text.text = "GANAN LOS ALIENS";
+                        
+                        var textUser = game.add.text(200, 400, '', { fill: '#ffffff' });
+                        textUser.fontSize = 30;
+                        newUser.setPuntos(1);
+                        textUser.text = "Usuario: "+ newUser.getId() +" +1p. Total: "+ newUser.getPuntos();
+
+                        usuarioGanador(newUser);
+                        ordenarRanking(ranking);
+                        cargarClasificacion(ranking);
+                        ponerVisible($("#imagenRanking"), false);
+                                    
+                        var button = game.add.button(390, 300, 'button', actionOnClick, this, 0, 0, 0);
+                        ponerVisibleButton($("#Bmover"), false);
+                        ponerVisibleButton($("#Batacar"), false);
+                        ponerVisibleButton($("#Besperar"), false);
+                        ponerVisibleButton($("#Bfin"), false);
+                        ponerVisibleButton($("#Brendirse"), false);
+                        
+                    } else {
+                        game.world.removeAll();
+                        text = game.add.text(170, 225, '', { fill: '#ffffff' });
+                        text.fontSize = 70;
+                        text.text = "GANAN LOS ALIENS";
+                        
+                        var textUser = game.add.text(200, 400, '', { fill: '#ffffff' });
+                        textUser.fontSize = 30;
+                        newUser.setPuntos(1);
+                        textUser.text = "Usuario: "+ newUser.getId() +" +1p. Total: "+ newUser.getPuntos();
+                        
+                        usuarioGanador(newUser);
+                        ordenarRanking(ranking);
+                        cargarClasificacion(ranking);
+                        ponerVisible($("#imagenRanking"), false);
+                                    
+                        var button = game.add.button(390, 300, 'button', actionOnClick, this, 0, 0, 0);
+                        ponerVisibleButton($("#Bmover"), false);
+                        ponerVisibleButton($("#Batacar"), false);
+                        ponerVisibleButton($("#Besperar"), false);
+                        ponerVisibleButton($("#Bfin"), false);
+                        ponerVisibleButton($("#Brendirse"), false);
                     }
 				})
     

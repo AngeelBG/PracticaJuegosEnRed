@@ -58,6 +58,7 @@
         var turno;
         var usuarios = [];
         var ranking = [];
+        var button ;
 
         const ANCHOMAPA = 10;
         const ALTOMAPA = 10;
@@ -365,7 +366,7 @@
                                     setTimeout(function(){ marine1.kill(); }, 1000);
                                     
                                     ///////////////GAME OVER
-                                    game.world.removeAll();
+                                    //game.world.removeAll();
                                     text = game.add.text(170, 225, '', { fill: '#ffffff' });
                                     text.fontSize = 70;
                                     text.text = "GANAN LOS ALIENS";
@@ -380,7 +381,7 @@
                                     cargarClasificacion(ranking);
                                     ponerVisible($("#imagenRanking"), false);
                                     
-                                    var button = game.add.button(390, 300, 'button', actionOnClick, this, 0, 0, 0);
+                                    button = game.add.button(390, 300, 'button', actionOnClick, this, 0, 0, 0);
                                     ponerVisibleButton($("#Bmover"), false);
                                     ponerVisibleButton($("#Batacar"), false);
                                     ponerVisibleButton($("#Besperar"), false);
@@ -497,7 +498,7 @@
                                     setTimeout(function(){ alien1.kill();  }, 1000);
 
                                     ///////////////GAME OVER
-                                    game.world.removeAll();
+                                    //game.world.removeAll();
                                     text = game.add.text(170, 225, '', { fill: '#ffffff' });
                                     text.fontSize = 70;
                                     text.text = "GANAN LOS MARINES";
@@ -512,7 +513,7 @@
                                     cargarClasificacion(ranking);
                                     ponerVisible($("#imagenRanking"), false);
                                     
-                                    var button = game.add.button(390, 300, 'button', actionOnClick, this, 0, 0, 0);
+                                    button = game.add.button(390, 300, 'button', actionOnClick, this, 0, 0, 0);
                                     ponerVisibleButton($("#Bmover"), false);
                                     ponerVisibleButton($("#Batacar"), false);
                                     ponerVisibleButton($("#Besperar"), false);
@@ -842,6 +843,7 @@
             ponerVisibleButton($("#Batacar"), true);
             ponerVisibleButton($("#Besperar"), true);
             ponerVisibleButton($("#Bfin"), true);
+            ponerVisibleButton($("#Brendirse"), true);
         }else{
             //Al no haber clickeado ningun personaje, deselecciono todos, y quito los botones
             textoInfo.setText("");
@@ -867,6 +869,9 @@
 
         ponerVisible($("#menu"), true);
         ponerVisible($("#menuJugar"), false);
+        create();
+        button.input.stop();
+        
 
     }
 
@@ -1173,10 +1178,10 @@ $(function() {
 			function() {
                     if(turno % 2 == 0){
                         ///////////////GAME OVER
-                        game.world.removeAll();
+                        //game.world.removeAll();
                         text = game.add.text(170, 225, '', { fill: '#ffffff' });
                         text.fontSize = 70;
-                        text.text = "GANAN LOS ALIENS";
+                        text.text = "GANAN LOS MARINES";
                         
                         var textUser = game.add.text(200, 400, '', { fill: '#ffffff' });
                         textUser.fontSize = 30;
@@ -1188,7 +1193,7 @@ $(function() {
                         cargarClasificacion(ranking);
                         ponerVisible($("#imagenRanking"), false);
                                     
-                        var button = game.add.button(390, 300, 'button', actionOnClick, this, 0, 0, 0);
+                        button = game.add.button(390, 300, 'button', actionOnClick, this, 0, 0, 0);
                         ponerVisibleButton($("#Bmover"), false);
                         ponerVisibleButton($("#Batacar"), false);
                         ponerVisibleButton($("#Besperar"), false);
@@ -1196,7 +1201,7 @@ $(function() {
                         ponerVisibleButton($("#Brendirse"), false);
                         
                     } else {
-                        game.world.removeAll();
+                        //game.world.removeAll();
                         text = game.add.text(170, 225, '', { fill: '#ffffff' });
                         text.fontSize = 70;
                         text.text = "GANAN LOS ALIENS";
@@ -1211,7 +1216,7 @@ $(function() {
                         cargarClasificacion(ranking);
                         ponerVisible($("#imagenRanking"), false);
                                     
-                        var button = game.add.button(390, 300, 'button', actionOnClick, this, 0, 0, 0);
+                        button = game.add.button(390, 300, 'button', actionOnClick, this, 0, 0, 0);
                         ponerVisibleButton($("#Bmover"), false);
                         ponerVisibleButton($("#Batacar"), false);
                         ponerVisibleButton($("#Besperar"), false);

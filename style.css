@@ -18,6 +18,8 @@ body {
     background-repeat:no-repeat; 
     background-attachment:fixed; 
     background-position:center; 
+    background-size: 100%;
+    background-size: cover;
     /*background: #103E66;
     color: #545454;*/
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;

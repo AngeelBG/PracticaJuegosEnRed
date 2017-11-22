@@ -1,4 +1,4 @@
- var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: preload, create: create, update: update });
+var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: preload, create: create, update: update });
    
 
         var mapa = [
@@ -72,6 +72,8 @@
         game.load.image('atacar', 'assets/Atacada.png');
         game.load.image('eliminado', 'assets/Eliminado.png');
         game.load.image('button', 'assets/BotonAtras.png');
+        game.load.image('GananAliens', 'assets/GananAliens.png');
+        game.load.image('GananMarines', 'assets/GananMarines.png');
         
         game.load.image('AlienQueen', 'assets/AlienQueen.png');
         game.load.image('AlienQueenClick', 'assets/AlienQueenClick.png');
@@ -118,7 +120,7 @@
         }
         return true;
     }
-    
+   /* 
     //compruebo si el usuario ganador está entre los mejores
     function usuarioGanador(usuario){
         for (var i=0; i < usuarios.length; i++){
@@ -138,16 +140,45 @@
 			}
 		}
 		return ranking;
-	}
+	}*/
+
+    
+	 // función que obtiene la tabla de clasificación del servidor(generada
+	 // aleatoriamente)
+	 function peticionClasificacion() {
+	 	$.ajax({
+	 		method : 'GET',
+	 		url : "http://localhost:8080/clasificacion/",
+	 		headers: {"Content-type": "application/json"}
+	 	}).done(function(dato) {
+	 		cargarClasificacion(dato);
+	 	})
+	 }
+	
+	 function actualizarClasificacion() {
+	 	//console.log(newUser.nombre+ ", " + newUser.puntos);
+	 	$.ajax({
+	 		method : 'POST',
+	 		url : "http://localhost:8080/clasificacion/check",
+	 		headers: {"Content-type": "application/json"},
+	 		data: JSON.stringify({"posicion": 11, "nombre": "pepe", "puntos": 13}),
+	 		processData: false
+	 	}).done(function(dato, status) {
+	 		if(status === "success")
+	 		peticionClasificacion();
+	 	})
+	 }
 
     //carga la clasificacion
     function cargarClasificacion(arrayRanking) {
         $("#Ranking")
                 .html(
-                    '<thead><th style ="width:60%">Jugador</th><th>Puntos</th></tr></thead>');
-        for (var i = 0; i < ranking.length; i++) {
+                    '<thead><tr><th>Posicion</th><th style ="width:60%">Jugador</th><th>Puntos</th></tr></thead>');
+        for (var i = 0; i < arrayRanking.length; i++) {
             $("#Ranking").append(
-                    "</td> <td>" + arrayRanking[i].getId() + "</td> <td>" + arrayRanking[i].getPuntos() + "</tr></td></tbody>");
+                    "<tbody><tr><td>" + arrayRanking[i].posicion + "</td> <td>" + arrayRanking[i].nombre
+						+ "</td> <td>" + arrayRanking[i].puntos + "</tr></td></tbody>");
+
         }
     }
 
@@ -367,21 +398,25 @@
                                     
                                     ///////////////GAME OVER
                                     //game.world.removeAll();
-                                    text = game.add.text(170, 225, '', { fill: '#ffffff' });
+                                    /*text = game.add.text(170, 225, '', { fill: '#ffffff' });
                                     text.fontSize = 70;
-                                    text.text = "GANAN LOS ALIENS";
+                                    text.text = "GANAN LOS ALIENS";*/
+                                    game.add.sprite(0, 0, 'GananAliens');
                                     
-                                    var textUser = game.add.text(200, 400, '', { fill: '#ffffff' });
+                                    
+                                    var textUser = game.add.text(380, 470, '', { fill: '#ffffff' });
                                     textUser.fontSize = 30;
                                     newUser.setPuntos(1);
                                     textUser.text = "Usuario: "+ newUser.getId() +" +1p. Total: "+ newUser.getPuntos();
                                     
-                                    usuarioGanador(newUser);
+                                    /*usuarioGanador(newUser);
                                     ordenarRanking(ranking);
-                                    cargarClasificacion(ranking);
+                                    cargarClasificacion(ranking);*/
+                                    peticionClasificacion();
+                                    actualizarClasificacion();
                                     ponerVisible($("#imagenRanking"), false);
-                                    
-                                    button = game.add.button(390, 300, 'button', actionOnClick, this, 0, 0, 0);
+                                                
+                                    button = game.add.button(370, 350, 'button', actionOnClick, this, 0, 0, 0);
                                     ponerVisibleButton($("#Bmover"), false);
                                     ponerVisibleButton($("#Batacar"), false);
                                     ponerVisibleButton($("#Besperar"), false);
@@ -499,21 +534,24 @@
 
                                     ///////////////GAME OVER
                                     //game.world.removeAll();
-                                    text = game.add.text(170, 225, '', { fill: '#ffffff' });
+                                    /*text = game.add.text(170, 225, '', { fill: '#ffffff' });
                                     text.fontSize = 70;
-                                    text.text = "GANAN LOS MARINES";
+                                    text.text = "GANAN LOS MARINES";*/
+                                    game.add.sprite(0, 0, 'GananMarines');
                                     
-                                    var textUser = game.add.text(200, 400, '', { fill: '#ffffff' });
+                                    var textUser = game.add.text(370, 470, '', { fill: '#ffffff' });
                                     textUser.fontSize = 30;
                                     newUser.setPuntos(1);
                                     textUser.text = "Usuario: "+ newUser.getId() +" +1p. Total: "+ newUser.getPuntos();
 
-                                    usuarioGanador(newUser);
+                                    /*usuarioGanador(newUser);
                                     ordenarRanking(ranking);
-                                    cargarClasificacion(ranking);
+                                    cargarClasificacion(ranking);*/
+                                    peticionClasificacion();
+                                    actualizarClasificacion();
                                     ponerVisible($("#imagenRanking"), false);
-                                    
-                                    button = game.add.button(390, 300, 'button', actionOnClick, this, 0, 0, 0);
+                                                
+                                    button = game.add.button(360, 330, 'button', actionOnClick, this, 0, 0, 0);
                                     ponerVisibleButton($("#Bmover"), false);
                                     ponerVisibleButton($("#Batacar"), false);
                                     ponerVisibleButton($("#Besperar"), false);
@@ -1179,21 +1217,24 @@ $(function() {
                     if(turno % 2 == 0){
                         ///////////////GAME OVER
                         //game.world.removeAll();
-                        text = game.add.text(170, 225, '', { fill: '#ffffff' });
+                        /*text = game.add.text(170, 225, '', { fill: '#ffffff' });
                         text.fontSize = 70;
-                        text.text = "GANAN LOS MARINES";
+                        text.text = "GANAN LOS MARINES";*/
+                    	game.add.sprite(0, 0, 'GananMarines');
                         
-                        var textUser = game.add.text(200, 400, '', { fill: '#ffffff' });
+                        var textUser = game.add.text(370, 470, '', { fill: '#ffffff' });
                         textUser.fontSize = 30;
                         newUser.setPuntos(1);
                         textUser.text = "Usuario: "+ newUser.getId() +" +1p. Total: "+ newUser.getPuntos();
 
-                        usuarioGanador(newUser);
+                        /*usuarioGanador(newUser);
                         ordenarRanking(ranking);
-                        cargarClasificacion(ranking);
+                        cargarClasificacion(ranking);*/
+                        peticionClasificacion();
+                        actualizarClasificacion();
                         ponerVisible($("#imagenRanking"), false);
                                     
-                        button = game.add.button(390, 300, 'button', actionOnClick, this, 0, 0, 0);
+                        button = game.add.button(360, 330, 'button', actionOnClick, this, 0, 0, 0);
                         ponerVisibleButton($("#Bmover"), false);
                         ponerVisibleButton($("#Batacar"), false);
                         ponerVisibleButton($("#Besperar"), false);
@@ -1202,21 +1243,24 @@ $(function() {
                         
                     } else {
                         //game.world.removeAll();
-                        text = game.add.text(170, 225, '', { fill: '#ffffff' });
+                        /*text = game.add.text(170, 225, '', { fill: '#ffffff' });
                         text.fontSize = 70;
-                        text.text = "GANAN LOS ALIENS";
+                        text.text = "GANAN LOS ALIENS";*/
+                    	game.add.sprite(0, 0, 'GananAliens');
                         
-                        var textUser = game.add.text(200, 400, '', { fill: '#ffffff' });
+                        var textUser = game.add.text(380, 470, '', { fill: '#ffffff' });
                         textUser.fontSize = 30;
                         newUser.setPuntos(1);
                         textUser.text = "Usuario: "+ newUser.getId() +" +1p. Total: "+ newUser.getPuntos();
                         
-                        usuarioGanador(newUser);
+                        /*usuarioGanador(newUser);
                         ordenarRanking(ranking);
-                        cargarClasificacion(ranking);
+                        cargarClasificacion(ranking);*/
+                        peticionClasificacion();
+                        actualizarClasificacion();
                         ponerVisible($("#imagenRanking"), false);
                                     
-                        button = game.add.button(390, 300, 'button', actionOnClick, this, 0, 0, 0);
+                        button = game.add.button(370, 350, 'button', actionOnClick, this, 0, 0, 0);
                         ponerVisibleButton($("#Bmover"), false);
                         ponerVisibleButton($("#Batacar"), false);
                         ponerVisibleButton($("#Besperar"), false);
@@ -1226,5 +1270,3 @@ $(function() {
 				})
     
 })
-
-                

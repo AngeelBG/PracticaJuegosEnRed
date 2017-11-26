@@ -1,16 +1,17 @@
 var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: preload, create: create, update: update });
    
+		//peticionClasificacion();
 
         var mapa = [
-             [1,2,1,1,1,1,1,1,1,1],
+             [3,2,1,1,1,1,1,1,3,1],
              [1,1,1,1,1,1,1,1,2,1],
              [1,1,2,1,1,1,1,2,1,1],
              [1,1,1,1,1,2,1,1,1,1],
-             [1,1,1,1,1,1,1,1,1,1],
-             [1,1,1,1,1,1,1,1,2,1],
+             [1,3,1,1,1,1,1,1,1,1],
+             [1,1,1,1,1,1,1,3,2,1],
              [1,1,1,2,1,1,1,1,1,1],
              [1,1,1,1,1,1,1,2,1,1],
-             [1,2,1,1,1,1,1,1,1,1],
+             [1,2,1,1,1,1,1,1,3,1],
              [1,1,1,1,1,1,1,1,1,1],
          ];
 
@@ -59,6 +60,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
         var usuarios = [];
         var ranking = [];
         var button ;
+        var userPos;
 
         const ANCHOMAPA = 10;
         const ALTOMAPA = 10;
@@ -67,8 +69,9 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
     function preload() {
 
         game.load.image('player1', 'assets/PLayer1.png');
-        game.load.image('1', 'assets/Cesped.png');
-        game.load.image('2', 'assets/roca.png');
+        game.load.image('1', 'assets/Suelo3.png');
+        game.load.image('2', 'assets/Roca.png');
+        game.load.image('3', 'assets/Crater.png');
         game.load.image('atacar', 'assets/Atacada.png');
         game.load.image('eliminado', 'assets/Eliminado.png');
         game.load.image('button', 'assets/BotonAtras.png');
@@ -95,9 +98,10 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
         
     }
 
-    function Usuario (id, puntos){
+    function Usuario (id, puntos, password){
         var id = id;
         var puntos = puntos;
+        var password = password;
         
         this.getId = function () {
             return id;
@@ -108,17 +112,44 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
         };
         
         this.setPuntos = function (nuevosPuntos) {
-            puntos = nuevosPuntos;
+            puntos += nuevosPuntos;
+        };
+        
+        this.getPassword = function () {
+            return password;
         };
   
     }
     
+    function posicionUsuario(){
+    	for (var i=0; i < usuarios.length; i++)
+    		if (usuarios[i].getId()== newUser.getId())
+    			userPos = i;
+    	
+    }
+    
     //compruebo si el nombre del usuario está libre
-    function usuarioValido(nuevoNombre){
+    /*function usuarioValido(nuevoNombre){
         for (var i=0; i < usuarios.length; i++){
             if (usuarios[i].getId() == nuevoNombre) return false;
         }
         return true;
+    }*/
+    
+    function generarUsuario(){
+    	
+    	var encontrado = false;
+    	
+    	for (var i=0; i < usuarios.length; i++){
+    		if ((usuarios[i].getId() == newUser.getId()) &&(usuarios[i].getPassword() == newUser.getPassword())){
+    			userPos= i;
+    			encontrado = true;
+    		}
+    	}
+    	if (!encontrado){
+    		usuarios.push(newUser);
+        	posicionUsuario();
+    	}
     }
    /* 
     //compruebo si el usuario ganador está entre los mejores
@@ -148,7 +179,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
 	 function peticionClasificacion() {
 	 	$.ajax({
 	 		method : 'GET',
-	 		url : "http://localhost:8080/clasificacion/",
+	 		url : "http://localhost:8015/clasificacion/",
 	 		headers: {"Content-type": "application/json"}
 	 	}).done(function(dato) {
 	 		cargarClasificacion(dato);
@@ -156,16 +187,18 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
 	 }
 	
 	 function actualizarClasificacion() {
-	 	//console.log(newUser.nombre+ ", " + newUser.puntos);
+	 	console.log(usuarios[userPos].getId()+ ", " + usuarios[userPos].getPuntos());
 	 	$.ajax({
 	 		method : 'POST',
-	 		url : "http://localhost:8080/clasificacion/check",
+	 		url : "http://localhost:8015/clasificacion/check",
 	 		headers: {"Content-type": "application/json"},
-	 		data: JSON.stringify({"posicion": 11, "nombre": "pepe", "puntos": 13}),
+	 		data: JSON.stringify({"posicion": 11, "nombre": usuarios[userPos].getId(), "puntos": usuarios[userPos].getPuntos()}),
 	 		processData: false
 	 	}).done(function(dato, status) {
 	 		if(status === "success")
-	 		peticionClasificacion();
+	 			peticionClasificacion();
+	 		else 
+	 			console.log(usuarios[userPos].getId()+ "No ha podio ser " );
 	 	})
 	 }
 
@@ -281,10 +314,6 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
         
     }
 
-
-
-    
-
     function create() {
         /* PINTADO DEL MAPA */
         for (var i=0; i < 10; i++){
@@ -341,18 +370,18 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
             alien2.setOpacity(1);
             alien3.setOpacity(1);
             alien4.setOpacity(1);
-            marine1.setOpacity(0.7);
-            marine2.setOpacity(0.7);
-            marine3.setOpacity(0.7);
-            marine4.setOpacity(0.7);
+            marine1.setOpacity(0.6);
+            marine2.setOpacity(0.6);
+            marine3.setOpacity(0.6);
+            marine4.setOpacity(0.6);
         }else{
             textoTurno.x = 250;
             textoTurno.text = "Turno de los Space Marines";
             setTimeout(function(){ textoTurno.setText(""); }, 3000);
-            alien1.setOpacity(0.7);
-            alien2.setOpacity(0.7);
-            alien3.setOpacity(0.7);
-            alien4.setOpacity(0.7);
+            alien1.setOpacity(0.6);
+            alien2.setOpacity(0.6);
+            alien3.setOpacity(0.6);
+            alien4.setOpacity(0.6);
             marine1.setOpacity(1);
             marine2.setOpacity(1);
             marine3.setOpacity(1);
@@ -389,7 +418,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                         switch(identificador) {
                             case 6:
                                 marine1.setOpacity(1);
-                                setTimeout(function(){ marine1.setOpacity(0.5); }, 1000);
+                                setTimeout(function(){ marine1.setOpacity(0.6); }, 1000);
                                 
                                 marine1.setLife(personajeSeleccionado.getDamage());
                                 if(marine1.getLife()<=0) {
@@ -406,13 +435,13 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                     
                                     var textUser = game.add.text(380, 470, '', { fill: '#ffffff' });
                                     textUser.fontSize = 30;
-                                    newUser.setPuntos(1);
-                                    textUser.text = "Usuario: "+ newUser.getId() +" +1p. Total: "+ newUser.getPuntos();
+                                    usuarios[userPos].setPuntos(1);
+                                    textUser.text = "Usuario: "+ usuarios[userPos].getId() +" +1p. Total: "+ usuarios[userPos].getPuntos();
                                     
-                                    /*usuarioGanador(newUser);
+                                    /*usuarioGanador(usuarios[userPos]);
                                     ordenarRanking(ranking);
                                     cargarClasificacion(ranking);*/
-                                    peticionClasificacion();
+                                    //peticionClasificacion();
                                     actualizarClasificacion();
                                     ponerVisible($("#imagenRanking"), false);
                                                 
@@ -429,7 +458,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                 break;
                             case 7:
                                 marine2.setOpacity(1);
-                                setTimeout(function(){ marine2.setOpacity(0.5); }, 1000);                                
+                                setTimeout(function(){ marine2.setOpacity(0.6); }, 1000);                                
                                 
                                 marine2.setLife(personajeSeleccionado.getDamage());
                                 if(marine2.getLife()<=0){
@@ -441,7 +470,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                 break;
                             case 8:
                                 marine3.setOpacity(1);
-                                setTimeout(function(){ marine3.setOpacity(0.5); }, 1000);                                
+                                setTimeout(function(){ marine3.setOpacity(0.6); }, 1000);                                
                                 
                                 marine3.setLife(personajeSeleccionado.getDamage());
                                 if(marine3.getLife()<=0){
@@ -454,7 +483,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                 
                             case 9:
                                 marine4.setOpacity(1);
-                                setTimeout(function(){ marine4.setOpacity(0.5); }, 1000);                                
+                                setTimeout(function(){ marine4.setOpacity(0.6); }, 1000);                                
                                 
                                 marine4.setLife(personajeSeleccionado.getDamage());
                                 if(marine4.getLife()<=0){
@@ -525,7 +554,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                         switch(identificador) {
                             case 2:
                                 alien1.setOpacity(1);
-                                setTimeout(function(){ alien1.setOpacity(0.5); }, 1000);
+                                setTimeout(function(){ alien1.setOpacity(0.6); }, 1000);
                                 
                                 alien1.setLife(personajeSeleccionado.getDamage());
                                 if(alien1.getLife()<=0) {
@@ -541,13 +570,13 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                     
                                     var textUser = game.add.text(370, 470, '', { fill: '#ffffff' });
                                     textUser.fontSize = 30;
-                                    newUser.setPuntos(1);
-                                    textUser.text = "Usuario: "+ newUser.getId() +" +1p. Total: "+ newUser.getPuntos();
+                                    usuarios[userPos].setPuntos(1);
+                                    textUser.text = "Usuario: "+ usuarios[userPos].getId() +" +1p. Total: "+ usuarios[userPos].getPuntos();
 
-                                    /*usuarioGanador(newUser);
+                                    /*usuarioGanador(usuarios[userPos]);
                                     ordenarRanking(ranking);
                                     cargarClasificacion(ranking);*/
-                                    peticionClasificacion();
+                                    //peticionClasificacion();
                                     actualizarClasificacion();
                                     ponerVisible($("#imagenRanking"), false);
                                                 
@@ -564,7 +593,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                 break;
                             case 3:
                                 alien2.setOpacity(1);
-                                setTimeout(function(){ alien2.setOpacity(0.5); }, 1000);                                
+                                setTimeout(function(){ alien2.setOpacity(0.6); }, 1000);                                
                                 
                                 alien2.setLife(personajeSeleccionado.getDamage());
                                 if(alien2.getLife()<=0){
@@ -576,7 +605,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                 break;
                             case 4:
                                 alien3.setOpacity(1);
-                                setTimeout(function(){ alien3.setOpacity(0.5); }, 1000);                                
+                                setTimeout(function(){ alien3.setOpacity(0.6); }, 1000);                                
                                 
                                 alien3.setLife(personajeSeleccionado.getDamage());
                                 if(alien3.getLife()<=0){
@@ -588,7 +617,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                 break;
                             case 5:
                                 alien4.setOpacity(1);
-                                setTimeout(function(){ alien4.setOpacity(0.5); }, 1000);                                
+                                setTimeout(function(){ alien4.setOpacity(0.6); }, 1000);                                
                                 
                                 alien4.setLife(personajeSeleccionado.getDamage());
                                 if(alien4.getLife()<=0){
@@ -946,14 +975,14 @@ function cambioEstadoBloqueado(boton, nuevoEstado){
 		boton.css({"opacity":1}); // opacity 1 visible
 		boton.prop("disabled", false);
 	}else{
-		boton.css({"opacity":0.5}); // opacity 0,5 no puede usarse
+		boton.css({"opacity":0.6}); // opacity 0,5 no puede usarse
 		boton.prop("disabled", true);
 		}
 }
 
 // funcion que se invoca al cargar la pagina
 $(function() {
-    
+	
     // BOTONES MENUS DEL JUEGO 
     $("#Bjugar").click(
 			function() {
@@ -969,6 +998,7 @@ $(function() {
     
     $("#Branking").click(
 			function() {
+					peticionClasificacion();
                     ponerVisible($("#menu"), false);
                     ponerVisible($("#menuRanking"), true);
 				})
@@ -983,16 +1013,19 @@ $(function() {
 			function() {
                     
                     var nombreUsuario = document.getElementById("apodo").value;
+                    var passwordUsuario = document.getElementById("password").value;
                 
-                    if ( (usuarioValido(nombreUsuario)) && (nombreUsuario != "")) {
-                        newUser = new Usuario(nombreUsuario, 0);
-                        usuarios.push(newUser);
+                    if ((nombreUsuario != "") && (passwordUsuario != "")) {
+                        newUser = new Usuario(nombreUsuario, 0, passwordUsuario);
+                        generarUsuario();
+                        //usuarios.push(newUser);
+                        //posicionUsuario();
                         $("#apodoDuplicado").html("");
                         ponerVisible($("#menuJugar"), true);
                         ponerVisible($("#menuUsuario"), false);
                     } else {
-                        if (!(usuarioValido(nombreUsuario))) $("#apodoDuplicado").html("El nick ya está cogido");
-                        if ((nombreUsuario == "")) $("#apodoDuplicado").html("El nick no puede estar vacío");
+                    	if ((nombreUsuario == "")) $("#apodoDuplicado").html("El nick no puede estar vacío");
+                    	if ((passwordUsuario == "")) $("#apodoDuplicado").html("La contraseña no puede estar vacía");
                     }
                 
                     textoTurno.text = "Turno de los Aliens";
@@ -1001,10 +1034,10 @@ $(function() {
                     alien2.setOpacity(1);
                     alien3.setOpacity(1);
                     alien4.setOpacity(1);
-                    marine1.setOpacity(0.7);
-                    marine2.setOpacity(0.7);
-                    marine3.setOpacity(0.7);
-                    marine4.setOpacity(0.7);
+                    marine1.setOpacity(0.6);
+                    marine2.setOpacity(0.6);
+                    marine3.setOpacity(0.6);
+                    marine4.setOpacity(0.6);
                     turno = 0;
 				})
     
@@ -1016,6 +1049,7 @@ $(function() {
                     if ( (usuarioValido(nombreUsuario)) && (nombreUsuario != "")) {
                         newUser = new Usuario(nombreUsuario, 0);
                         usuarios.push(newUser);
+                        posicionUsuario();
                         $("#apodoDuplicado").html("");
                         ponerVisible($("#menuJugar"), true);
                         ponerVisible($("#menuUsuario"), false);
@@ -1027,10 +1061,10 @@ $(function() {
                     textoTurno.x = 250;
                     textoTurno.text = "Turno de los Space Marines";
                     setTimeout(function(){ textoTurno.setText(""); }, 3000);
-                    alien1.setOpacity(0.7);
-                    alien2.setOpacity(0.7);
-                    alien3.setOpacity(0.7);
-                    alien4.setOpacity(0.7);
+                    alien1.setOpacity(0.6);
+                    alien2.setOpacity(0.6);
+                    alien3.setOpacity(0.6);
+                    alien4.setOpacity(0.6);
                     marine1.setOpacity(1);
                     marine2.setOpacity(1);
                     marine3.setOpacity(1);
@@ -1192,19 +1226,19 @@ $(function() {
                         alien2.setOpacity(1);
                         alien3.setOpacity(1);
                         alien4.setOpacity(1);
-                        marine1.setOpacity(0.7);
-                        marine2.setOpacity(0.7);
-                        marine3.setOpacity(0.7);
-                        marine4.setOpacity(0.7);
+                        marine1.setOpacity(0.6);
+                        marine2.setOpacity(0.6);
+                        marine3.setOpacity(0.6);
+                        marine4.setOpacity(0.6);
 
                     }else{
                         textoTurno.x = 230;
                         textoTurno.text = "Turno de los Space Marines";
                         setTimeout(function(){ textoTurno.setText(""); }, 3000);
-                        alien1.setOpacity(0.7);
-                        alien2.setOpacity(0.7);
-                        alien3.setOpacity(0.7);
-                        alien4.setOpacity(0.7);
+                        alien1.setOpacity(0.6);
+                        alien2.setOpacity(0.6);
+                        alien3.setOpacity(0.6);
+                        alien4.setOpacity(0.6);
                         marine1.setOpacity(1);
                         marine2.setOpacity(1);
                         marine3.setOpacity(1);
@@ -1224,13 +1258,13 @@ $(function() {
                         
                         var textUser = game.add.text(370, 470, '', { fill: '#ffffff' });
                         textUser.fontSize = 30;
-                        newUser.setPuntos(1);
-                        textUser.text = "Usuario: "+ newUser.getId() +" +1p. Total: "+ newUser.getPuntos();
+                        usuarios[userPos].setPuntos(1);
+                        textUser.text = "Usuario: "+ usuarios[userPos].getId() +" +1p. Total: "+ usuarios[userPos].getPuntos();
 
-                        /*usuarioGanador(newUser);
+                        /*usuarioGanador(usuarios[userPos]);
                         ordenarRanking(ranking);
                         cargarClasificacion(ranking);*/
-                        peticionClasificacion();
+                        //peticionClasificacion();
                         actualizarClasificacion();
                         ponerVisible($("#imagenRanking"), false);
                                     
@@ -1250,13 +1284,13 @@ $(function() {
                         
                         var textUser = game.add.text(380, 470, '', { fill: '#ffffff' });
                         textUser.fontSize = 30;
-                        newUser.setPuntos(1);
-                        textUser.text = "Usuario: "+ newUser.getId() +" +1p. Total: "+ newUser.getPuntos();
+                        usuarios[userPos].setPuntos(1);
+                        textUser.text = "Usuario: "+ usuarios[userPos].getId() +" +1p. Total: "+ usuarios[userPos].getPuntos();
                         
-                        /*usuarioGanador(newUser);
+                        /*usuarioGanador(usuarios[userPos]);
                         ordenarRanking(ranking);
                         cargarClasificacion(ranking);*/
-                        peticionClasificacion();
+                        //peticionClasificacion();
                         actualizarClasificacion();
                         ponerVisible($("#imagenRanking"), false);
                                     

@@ -55,4 +55,4 @@
   
 ## _Diagrama-UML_:
   
-  ![alt text](https://github.com/AngeelBG/PracticaJuegosEnRed/blob/master/Pantallazos/Diagrama.png)
+  ![alt text](https://github.com/AngeelBG/PracticaJuegosEnRed/blob/master/Pantallazos/UML-RunicWars.jpg)

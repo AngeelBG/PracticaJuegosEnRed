@@ -121,65 +121,86 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
   
     }
     
-    function posicionUsuario(){
+    function posicionUsuario(nombre){
     	for (var i=0; i < usuarios.length; i++)
-    		if (usuarios[i].getId()== newUser.getId())
+    		if (usuarios[i].getId()== nombre)
     			userPos = i;
     	
     }
     
-    //compruebo si el nombre del usuario está libre
-    /*function usuarioValido(nuevoNombre){
+    //compruebo si el nombre del usuario está libre y si esta ocupado, que la contraseña coincida
+    function usuarioValido(nuevoNombre, pass){
         for (var i=0; i < usuarios.length; i++){
-            if (usuarios[i].getId() == nuevoNombre) return false;
+            if (usuarios[i].getId() == nuevoNombre){
+            	if (usuarios[i].getPassword() == pass){
+            		return 1;
+            	}else{
+               		return 2;
+            	}
+            } 
         }
-        return true;
-    }*/
+        return 3;
+    }
     
     function generarUsuario(){
-    	
-    	var encontrado = false;
-    	
-    	for (var i=0; i < usuarios.length; i++){
-    		if ((usuarios[i].getId() == newUser.getId()) &&(usuarios[i].getPassword() == newUser.getPassword())){
-    			userPos= i;
-    			encontrado = true;
-    		}
-    	}
-    	if (!encontrado){
     		usuarios.push(newUser);
-        	posicionUsuario();
-    	}
-    }
-   /* 
-    //compruebo si el usuario ganador está entre los mejores
-    function usuarioGanador(usuario){
-        for (var i=0; i < usuarios.length; i++){
-            if (usuarios[i].getPuntos() <= usuario.getPuntos()) ranking.push(usuario);
-        }
+        	posicionUsuario(newUser.getId());
+        	addUsuario();
     }
 
-    //ordena el array por el metodo de la burbuja
-    function ordenarRanking(ranking){
-		for(var i=1;i<ranking.length;i++){
-			for(var j=0;j<(ranking.length-i);j++){
-				if(ranking[j].getPuntos() >ranking[j+1].getPuntos()){
-					var aux = ranking[j+1];
-					ranking[j+1] = ranking[j];
-					ranking[j] = aux;
-				}
-			}
-		}
-		return ranking;
-	}*/
-
+    function getUsuarios(){
+    	$.ajax({
+    		method: 'GET',
+    		url : "http://localhost:8017/usuarios/",
+	 		headers: {"Content-type": "application/json"}
+	 	}).done(function(dato) {
+	 		copia(dato);		
+    	})
+    }
+    
+    function copia(array){
+ 		for (var i=0; i< array.lenght; i++){
+ 			var nuevoUsuario = new Usuario(array[i].id, array[i].puntos, array[i].password);
+ 			usuarios[i]= nuevoUsuario;
+ 		}
+    }
+    
+    function addUsuario() {
+	 	$.ajax({
+	 		method : 'POST',
+	 		url : "http://localhost:8017/usuarios/nuevo",
+	 		headers: {"Content-type": "application/json"},
+	 		data: JSON.stringify({"id": usuarios[userPos].getId(),"password": usuarios[userPos].getPassword(), "puntos": usuarios[userPos].getPuntos()}),
+	 		processData: false
+	 	}).done(function(dato, status) {
+	 		if(status === "success"){
+	 			getUsuarios();
+	 		}else 
+	 			console.log(usuarios[userPos].getId()+ "No ha podio ser " );
+	 	})
+	 }
+    function setUsuarios(){
+    	$.ajax({
+	 		method : 'PUT',
+	 		url : "http://localhost:8017/usuarios/modify",
+	 		headers: {"Content-type": "application/json"},
+	 		data: JSON.stringify({"id": usuarios[userPos].getId(),"password": usuarios[userPos].getPassword(), "puntos": usuarios[userPos].getPuntos()}),
+	 		processData: false
+	 	}).done(function(dato, status) {
+	 		if(status === "success"){
+	 			getUsuarios();
+	 		}else 
+	 			console.log(usuarios[userPos].getId()+ "No ha podio ser " );
+	 	})
+    }
+    
     
 	 // función que obtiene la tabla de clasificación del servidor(generada
 	 // aleatoriamente)
 	 function peticionClasificacion() {
 	 	$.ajax({
 	 		method : 'GET',
-	 		url : "http://localhost:8015/clasificacion/",
+	 		url : "http://localhost:8017/clasificacion/",
 	 		headers: {"Content-type": "application/json"}
 	 	}).done(function(dato) {
 	 		cargarClasificacion(dato);
@@ -190,7 +211,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
 	 	console.log(usuarios[userPos].getId()+ ", " + usuarios[userPos].getPuntos());
 	 	$.ajax({
 	 		method : 'POST',
-	 		url : "http://localhost:8015/clasificacion/check",
+	 		url : "http://localhost:8017/clasificacion/check",
 	 		headers: {"Content-type": "application/json"},
 	 		data: JSON.stringify({"posicion": 11, "nombre": usuarios[userPos].getId(), "puntos": usuarios[userPos].getPuntos()}),
 	 		processData: false
@@ -204,11 +225,11 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
 
     //carga la clasificacion
     function cargarClasificacion(arrayRanking) {
-        $("#Ranking")
+        $("#rank")
                 .html(
                     '<thead><tr><th>Posicion</th><th style ="width:60%">Jugador</th><th>Puntos</th></tr></thead>');
         for (var i = 0; i < arrayRanking.length; i++) {
-            $("#Ranking").append(
+            $("#rank").append(
                     "<tbody><tr><td>" + arrayRanking[i].posicion + "</td> <td>" + arrayRanking[i].nombre
 						+ "</td> <td>" + arrayRanking[i].puntos + "</tr></td></tbody>");
 
@@ -436,6 +457,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                     var textUser = game.add.text(380, 470, '', { fill: '#ffffff' });
                                     textUser.fontSize = 30;
                                     usuarios[userPos].setPuntos(1);
+                                    setUsuarios();
                                     textUser.text = "Usuario: "+ usuarios[userPos].getId() +" +1p. Total: "+ usuarios[userPos].getPuntos();
                                     
                                     /*usuarioGanador(usuarios[userPos]);
@@ -571,6 +593,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                     var textUser = game.add.text(370, 470, '', { fill: '#ffffff' });
                                     textUser.fontSize = 30;
                                     usuarios[userPos].setPuntos(1);
+                                    setUsuarios();
                                     textUser.text = "Usuario: "+ usuarios[userPos].getId() +" +1p. Total: "+ usuarios[userPos].getPuntos();
 
                                     /*usuarioGanador(usuarios[userPos]);
@@ -982,10 +1005,12 @@ function cambioEstadoBloqueado(boton, nuevoEstado){
 
 // funcion que se invoca al cargar la pagina
 $(function() {
-	
+	//getUsuarios();
+	peticionClasificacion();
     // BOTONES MENUS DEL JUEGO 
     $("#Bjugar").click(
 			function() {
+					getUsuarios();
                     ponerVisible($("#menu"), false);
                     ponerVisible($("#menuUsuario"), true);
                 
@@ -998,7 +1023,7 @@ $(function() {
     
     $("#Branking").click(
 			function() {
-					peticionClasificacion();
+					
                     ponerVisible($("#menu"), false);
                     ponerVisible($("#menuRanking"), true);
 				})
@@ -1016,13 +1041,36 @@ $(function() {
                     var passwordUsuario = document.getElementById("password").value;
                 
                     if ((nombreUsuario != "") && (passwordUsuario != "")) {
-                        newUser = new Usuario(nombreUsuario, 0, passwordUsuario);
-                        generarUsuario();
+                    	
+                    	var caso = usuarioValido(nombreUsuario, passwordUsuario);
+                    
+	                    switch(caso) {
+	                    	 //usuario existe y contraseña bien
+	                         case 1:
+	                        	 posicionUsuario(nombreUsuario);
+	                             $("#apodoDuplicado").html("");
+	                             ponerVisible($("#menuJugar"), true);
+	                             ponerVisible($("#menuUsuario"), false);
+	                        	 break;
+	                         //usuario existe y contraseña mal
+	                         case 2:
+	                     		 $("#apodoDuplicado").html("Contraseña incorrecta.");
+	                        	 break;
+	                         //usuario no existe
+	                         case 3:
+	                             newUser = new Usuario(nombreUsuario, 0, passwordUsuario);
+	                             generarUsuario();
+	                             $("#apodoDuplicado").html("");
+	                             ponerVisible($("#menuJugar"), true);
+	                             ponerVisible($("#menuUsuario"), false);
+	                         	 break;
+	                    }
+                    	
+                    	
+
                         //usuarios.push(newUser);
                         //posicionUsuario();
-                        $("#apodoDuplicado").html("");
-                        ponerVisible($("#menuJugar"), true);
-                        ponerVisible($("#menuUsuario"), false);
+
                     } else {
                     	if ((nombreUsuario == "")) $("#apodoDuplicado").html("El nick no puede estar vacío");
                     	if ((passwordUsuario == "")) $("#apodoDuplicado").html("La contraseña no puede estar vacía");
@@ -1044,20 +1092,45 @@ $(function() {
     $("#Bmarines").click(
 			function() {
                 
-                    var nombreUsuario = document.getElementById("apodo").value;
+                var nombreUsuario = document.getElementById("apodo").value;
+                var passwordUsuario = document.getElementById("password").value;
+            
+                if ((nombreUsuario != "") && (passwordUsuario != "")) {
+                	
+                	var caso = usuarioValido(nombreUsuario, passwordUsuario);
                 
-                    if ( (usuarioValido(nombreUsuario)) && (nombreUsuario != "")) {
-                        newUser = new Usuario(nombreUsuario, 0);
-                        usuarios.push(newUser);
-                        posicionUsuario();
-                        $("#apodoDuplicado").html("");
-                        ponerVisible($("#menuJugar"), true);
-                        ponerVisible($("#menuUsuario"), false);
-                    } else {
-                        if (!(usuarioValido(nombreUsuario))) $("#apodoDuplicado").html("El nick ya está cogido");
-                        if ((nombreUsuario == "")) $("#apodoDuplicado").html("El nick no puede estar vacío");
+                    switch(caso) {
+                    	 //usuario existe y contraseña bien
+                         case 1:
+                        	 posicionUsuario(nombreUsuario);
+                             $("#apodoDuplicado").html("");
+                             ponerVisible($("#menuJugar"), true);
+                             ponerVisible($("#menuUsuario"), false);
+                        	 break;
+                         //usuario existe y contraseña mal
+                         case 2:
+                     		 $("#apodoDuplicado").html("Contraseña incorrecta.");
+                        	 break;
+                         //usuario no existe
+                         case 3:
+                             newUser = new Usuario(nombreUsuario, 0, passwordUsuario);
+                             generarUsuario();
+                             $("#apodoDuplicado").html("");
+                             ponerVisible($("#menuJugar"), true);
+                             ponerVisible($("#menuUsuario"), false);
+                         	 break;
                     }
-                
+                	
+                	
+
+                    //usuarios.push(newUser);
+                    //posicionUsuario();
+
+                } else {
+                	if ((nombreUsuario == "")) $("#apodoDuplicado").html("El nick no puede estar vacío");
+                	if ((passwordUsuario == "")) $("#apodoDuplicado").html("La contraseña no puede estar vacía");
+                }
+            
                     textoTurno.x = 250;
                     textoTurno.text = "Turno de los Space Marines";
                     setTimeout(function(){ textoTurno.setText(""); }, 3000);
@@ -1259,6 +1332,7 @@ $(function() {
                         var textUser = game.add.text(370, 470, '', { fill: '#ffffff' });
                         textUser.fontSize = 30;
                         usuarios[userPos].setPuntos(1);
+                        setUsuarios();
                         textUser.text = "Usuario: "+ usuarios[userPos].getId() +" +1p. Total: "+ usuarios[userPos].getPuntos();
 
                         /*usuarioGanador(usuarios[userPos]);
@@ -1285,6 +1359,7 @@ $(function() {
                         var textUser = game.add.text(380, 470, '', { fill: '#ffffff' });
                         textUser.fontSize = 30;
                         usuarios[userPos].setPuntos(1);
+                        setUsuarios();
                         textUser.text = "Usuario: "+ usuarios[userPos].getId() +" +1p. Total: "+ usuarios[userPos].getPuntos();
                         
                         /*usuarioGanador(usuarios[userPos]);

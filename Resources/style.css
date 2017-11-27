@@ -1,18 +1,4 @@
-/*.title{
-	background: #103E66;
-    color: #000000;
-    background-image:url(assets/Titulo.png);
-    font-family: Arial,Helvetica,  sans-serif;
-    font-size: 120px;
-    letter-spacing: -6px;
-    text-shadow: 5px 0px 2px #808080;
-    font-weight: bold;
-    line-height: 1.3;
-    margin: 0 auto;
-    max-width: 1000px;
-    max-height: 5000px;
-    padding: 2em 2em em;
-}*/
+
 body { 
     background-image:url(assets/Background.png); 
     background-repeat:no-repeat; 
@@ -20,8 +6,6 @@ body {
     background-position:center; 
     background-size: 100%;
     background-size: cover;
-    /*background: #103E66;
-    color: #545454;*/
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 20px;
     line-height: 1.3;
@@ -30,7 +14,11 @@ body {
     padding: 2em 2em em;                
 }
 
+@font-face {
+  font-family: 'Galaxy Force';
 
+  src: url(assets/Galaxy Force.ttf) format('ttf');
+}
 span.crosshair {
     cursor: crosshair;
 }
@@ -349,92 +337,12 @@ span.crosshair {
 	font-size: 130%;
 
 }
-/*
-.gameplay{	
-	display:none;
-}*/
 
-/*#botonesJuego{
-  padding: 1em;
-  margin: 1em 0 1em 4em;
-  height: 50px;
-      position: relative;
-}*/
 
 #menu{
 	display:block;
 }
 
-
-
-/*
-.myButton {
-	-moz-box-shadow:inset 0px -5px 10px 1px #276873;
-	-webkit-box-shadow:inset 0px -5px 10px 1px #276873;
-	box-shadow:inset 0px -5px 10px 1px #276873;
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #599bb3), color-stop(1, #408c99));
-	background:-moz-linear-gradient(top, #599bb3 5%, #408c99 100%);
-	background:-webkit-linear-gradient(top, #599bb3 5%, #408c99 100%);
-	background:-o-linear-gradient(top, #599bb3 5%, #408c99 100%);
-	background:-ms-linear-gradient(top, #599bb3 5%, #408c99 100%);
-	background:linear-gradient(to bottom, #599bb3 5%, #408c99 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#599bb3', endColorstr='#408c99',GradientType=0);
-	background-color:#599bb3;
-	-moz-border-radius:17px;
-	-webkit-border-radius:17px;
-	border-radius:17px;
-	border:5px solid #29668f;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:25px;
-	font-weight:bold;
-	padding:12px 29px;
-	text-decoration:none;
-	text-shadow:5px 3px 1px #3d768a;
-	outline: none !important;
-	margin-left: 10px;
-}
-.myButton:hover {
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #408c99), color-stop(1, #599bb3));
-	background:-moz-linear-gradient(top, #408c99 5%, #599bb3 100%);
-	background:-webkit-linear-gradient(top, #408c99 5%, #599bb3 100%);
-	background:-o-linear-gradient(top, #408c99 5%, #599bb3 100%);
-	background:-ms-linear-gradient(top, #408c99 5%, #599bb3 100%);
-	background:linear-gradient(to bottom, #408c99 5%, #599bb3 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#408c99', endColorstr='#599bb3',GradientType=0);
-	background-color:#408c99;
-}*/
-
-/*.info{
-    text-align:center;
-    font-size: 25px;
-    font-family: Arial,Helvetica,  sans-serif;
-    font-weight:bold;
-    width:80%;
-    height:35px;  
-}
-
-#console-container {
-	float: left;
-	margin-left: 15px;
-	width: 300px;
-}
-#console {
-	border: 1px solid #CCCCCC;
-	border-right-color: #999999;
-	border-bottom-color: #999999;
-	height: 480px;
-	overflow-y: scroll;
-	padding-left: 5px;
-	padding-right: 5px;
-	width: 100%;
-}
-#console p {
-	padding: 0;
-	margin: 0;
-}*/
 
 .page{
 	margin:auto;
@@ -444,66 +352,40 @@ span.crosshair {
 
 
 
-#tablaClas{	
-	display: block;
+table.ranking {
+  font-family: 'Galaxy Force',"Arial Black", Gadget, sans-serif;
+  border: 5px solid #000000;
+  background-color: #0773A1;
+  width: 100%;
+  height: 200px;
+  text-align: center;
+  border-collapse: collapse;
 }
-
-
-.datagrid table { 
-	border-collapse: collapse; 
-	text-align: left; 
-	width: 100%; 
-} 
-
-.datagrid {
-	font: normal 12px/150% Arial, Helvetica, sans-serif; 
-	background: #fff; 
-	overflow: hidden; 
-	border: 2px solid #000000; 
-	-webkit-border-radius: 8px; 
-	-moz-border-radius: 8px; 
-	border-radius: 8px; 
+table.ranking td, table.ranking th {
+  border: 5px solid #FFFFFF;
+  padding: 7px 1px;
 }
-
-.datagrid table td, .datagrid table th { 
-	padding: 9px 20px; 
+table.ranking tbody td {
+  font-size: 25px;
+  color: #000000;
 }
-
-.datagrid table thead th {
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #27AB3E), color-stop(1, #1E8530) );
-	background:-moz-linear-gradient( center top, #27AB3E 5%, #1E8530 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#27AB3E', endColorstr='#1E8530');
-	background-color:#27AB3E; 
-	color:#FFFFFF; 
-	font-size: 18px; 
-	font-weight: bold; 
-	border-left: 2px solid #000000; 
-} 
-
-.datagrid table thead th:first-child { 
-	border: none; 
+table.ranking tr:nth-child(even) {
+  background: #2e4472;
 }
-
-.datagrid table tbody td { 
-	color: #000000; 
-	border-left: 2px solid #000000;
-	font-size: 14px;
-	font-weight: normal; 
+table.ranking thead {
+  background: #000000;
+  background: -moz-linear-gradient(top, #404040 0%, #191919 66%, #000000 100%);
+  background: -webkit-linear-gradient(top, #404040 0%, #191919 66%, #000000 100%);
+  background: linear-gradient(to bottom, #404040 0%, #191919 66%, #000000 100%);
 }
-
-
-.datagrid table tbody  td:nth-child(odd) { 
-	background: #78D95F; 
-	color: #000000; 
+table.ranking thead th {
+  font-size: 35px;
+  font-weight: bold;
+  color: #E6E6E6;
+  text-align: center;
 }
-
-
-.datagrid table tbody td:first-child { 
-	border-left: none; 
-}
-
-.datagrid table tbody tr:last-child td {
-	border-bottom: none; 
+table.ranking tfoot td {
+  font-size: 20px;
 }
 
 /* Carousel base class */

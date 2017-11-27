@@ -130,15 +130,19 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
     
     //compruebo si el nombre del usuario está libre y si esta ocupado, que la contraseña coincida
     function usuarioValido(nuevoNombre, pass){
+    	getUsuarios();
         for (var i=0; i < usuarios.length; i++){
             if (usuarios[i].getId() == nuevoNombre){
             	if (usuarios[i].getPassword() == pass){
+            		console.log("caso1");
             		return 1;
             	}else{
+            		console.log("caso2");
                		return 2;
             	}
             } 
         }
+        console.log("caso3");
         return 3;
     }
     
@@ -151,7 +155,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
     function getUsuarios(){
     	$.ajax({
     		method: 'GET',
-    		url : "http://localhost:8017/usuarios/",
+    		url : "http://localhost:8019/usuarios/",
 	 		headers: {"Content-type": "application/json"}
 	 	}).done(function(dato) {
 	 		copia(dato);		
@@ -159,8 +163,11 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
     }
     
     function copia(array){
- 		for (var i=0; i< array.lenght; i++){
+ 		for (var i=0; i< array.length; i++){
  			var nuevoUsuario = new Usuario(array[i].id, array[i].puntos, array[i].password);
+ 			console.log("Usuario introducido: " + array[i].id);
+ 			console.log("Puntos: " + array[i].puntos);
+ 			console.log("Password: " + array[i].password);
  			usuarios[i]= nuevoUsuario;
  		}
     }
@@ -168,29 +175,29 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
     function addUsuario() {
 	 	$.ajax({
 	 		method : 'POST',
-	 		url : "http://localhost:8017/usuarios/nuevo",
+	 		url : "http://localhost:8019/usuarios/nuevo",
 	 		headers: {"Content-type": "application/json"},
 	 		data: JSON.stringify({"id": usuarios[userPos].getId(),"password": usuarios[userPos].getPassword(), "puntos": usuarios[userPos].getPuntos()}),
 	 		processData: false
 	 	}).done(function(dato, status) {
 	 		if(status === "success"){
-	 			getUsuarios();
+	 			
 	 		}else 
-	 			console.log(usuarios[userPos].getId()+ "No ha podio ser " );
+	 			console.log(usuarios[userPos].getId()+ " no se ha introducido " );
 	 	})
 	 }
     function setUsuarios(){
     	$.ajax({
 	 		method : 'PUT',
-	 		url : "http://localhost:8017/usuarios/modify",
+	 		url : "http://localhost:8019/usuarios/modify",
 	 		headers: {"Content-type": "application/json"},
 	 		data: JSON.stringify({"id": usuarios[userPos].getId(),"password": usuarios[userPos].getPassword(), "puntos": usuarios[userPos].getPuntos()}),
 	 		processData: false
 	 	}).done(function(dato, status) {
 	 		if(status === "success"){
-	 			getUsuarios();
+	 			
 	 		}else 
-	 			console.log(usuarios[userPos].getId()+ "No ha podio ser " );
+	 			console.log(usuarios[userPos].getId()+ " no se ha actualizado " );
 	 	})
     }
     
@@ -200,7 +207,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
 	 function peticionClasificacion() {
 	 	$.ajax({
 	 		method : 'GET',
-	 		url : "http://localhost:8017/clasificacion/",
+	 		url : "http://localhost:8019/clasificacion/",
 	 		headers: {"Content-type": "application/json"}
 	 	}).done(function(dato) {
 	 		cargarClasificacion(dato);
@@ -211,7 +218,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
 	 	console.log(usuarios[userPos].getId()+ ", " + usuarios[userPos].getPuntos());
 	 	$.ajax({
 	 		method : 'POST',
-	 		url : "http://localhost:8017/clasificacion/check",
+	 		url : "http://localhost:8019/clasificacion/check",
 	 		headers: {"Content-type": "application/json"},
 	 		data: JSON.stringify({"posicion": 11, "nombre": usuarios[userPos].getId(), "puntos": usuarios[userPos].getPuntos()}),
 	 		processData: false
@@ -219,7 +226,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
 	 		if(status === "success")
 	 			peticionClasificacion();
 	 		else 
-	 			console.log(usuarios[userPos].getId()+ "No ha podio ser " );
+	 			console.log(usuarios[userPos].getId()+ " no ha entrado en la clasificacion " );
 	 	})
 	 }
 
@@ -261,7 +268,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
             tropa.loadTexture(sprite, 0);
         };
         
-        //this.mov = 2;
+        
         this.getX = function () {
             return tropa.x;
         };
@@ -345,7 +352,10 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                 tiles[i][j] = game.add.sprite(x, y, tileType);
             }
         }
-
+        
+    
+        console.log (usuarios);
+        
         //arrayPersonajes[0] = new Tropa ('alien', 'player1', 5*anchoTile, 5*altoTile, 2, 2, 20);
         alien1 = new Tropa ('Alien Queen', 'AlienQueen', 4*anchoTile, 0*altoTile, 2, 40, 150, 1, 2);
         alien2 = new Tropa ('Spitter', 'Spitter', 6*anchoTile, 1*altoTile, 2, 20, 70, 4, 3);
@@ -384,30 +394,6 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
         textoInfoAtaque.stroke = '#000000';
         textoInfoAtaque.strokeThickness = 2;
         
-        /*if (turno % 2 == 0){
-            textoTurno.text = "Turno de los Aliens";
-            setTimeout(function(){ textoTurno.setText(""); }, 3000);
-            alien1.setOpacity(1);
-            alien2.setOpacity(1);
-            alien3.setOpacity(1);
-            alien4.setOpacity(1);
-            marine1.setOpacity(0.6);
-            marine2.setOpacity(0.6);
-            marine3.setOpacity(0.6);
-            marine4.setOpacity(0.6);
-        }else{
-            textoTurno.x = 250;
-            textoTurno.text = "Turno de los Space Marines";
-            setTimeout(function(){ textoTurno.setText(""); }, 3000);
-            alien1.setOpacity(0.6);
-            alien2.setOpacity(0.6);
-            alien3.setOpacity(0.6);
-            alien4.setOpacity(0.6);
-            marine1.setOpacity(1);
-            marine2.setOpacity(1);
-            marine3.setOpacity(1);
-            marine4.setOpacity(1);
-        }*/
 
         game.input.onDown.add(listener, this);
 
@@ -447,10 +433,6 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                     setTimeout(function(){ marine1.kill(); }, 1000);
                                     
                                     ///////////////GAME OVER
-                                    //game.world.removeAll();
-                                    /*text = game.add.text(170, 225, '', { fill: '#ffffff' });
-                                    text.fontSize = 70;
-                                    text.text = "GANAN LOS ALIENS";*/
                                     game.add.sprite(0, 0, 'GananAliens');
                                     
                                     
@@ -460,10 +442,6 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                     setUsuarios();
                                     textUser.text = "Usuario: "+ usuarios[userPos].getId() +" +1p. Total: "+ usuarios[userPos].getPuntos();
                                     
-                                    /*usuarioGanador(usuarios[userPos]);
-                                    ordenarRanking(ranking);
-                                    cargarClasificacion(ranking);*/
-                                    //peticionClasificacion();
                                     actualizarClasificacion();
                                     ponerVisible($("#imagenRanking"), false);
                                                 
@@ -584,10 +562,6 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                     setTimeout(function(){ alien1.kill();  }, 1000);
 
                                     ///////////////GAME OVER
-                                    //game.world.removeAll();
-                                    /*text = game.add.text(170, 225, '', { fill: '#ffffff' });
-                                    text.fontSize = 70;
-                                    text.text = "GANAN LOS MARINES";*/
                                     game.add.sprite(0, 0, 'GananMarines');
                                     
                                     var textUser = game.add.text(370, 470, '', { fill: '#ffffff' });
@@ -596,10 +570,6 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                     setUsuarios();
                                     textUser.text = "Usuario: "+ usuarios[userPos].getId() +" +1p. Total: "+ usuarios[userPos].getPuntos();
 
-                                    /*usuarioGanador(usuarios[userPos]);
-                                    ordenarRanking(ranking);
-                                    cargarClasificacion(ranking);*/
-                                    //peticionClasificacion();
                                     actualizarClasificacion();
                                     ponerVisible($("#imagenRanking"), false);
                                                 
@@ -1005,12 +975,10 @@ function cambioEstadoBloqueado(boton, nuevoEstado){
 
 // funcion que se invoca al cargar la pagina
 $(function() {
-	//getUsuarios();
-	peticionClasificacion();
+	
     // BOTONES MENUS DEL JUEGO 
     $("#Bjugar").click(
 			function() {
-					getUsuarios();
                     ponerVisible($("#menu"), false);
                     ponerVisible($("#menuUsuario"), true);
                 
@@ -1023,7 +991,7 @@ $(function() {
     
     $("#Branking").click(
 			function() {
-					
+					peticionClasificacion();
                     ponerVisible($("#menu"), false);
                     ponerVisible($("#menuRanking"), true);
 				})
@@ -1051,6 +1019,19 @@ $(function() {
 	                             $("#apodoDuplicado").html("");
 	                             ponerVisible($("#menuJugar"), true);
 	                             ponerVisible($("#menuUsuario"), false);
+	                             
+	                             textoTurno.text = "Turno de los Aliens";
+	                             setTimeout(function(){ textoTurno.setText(""); }, 3000);
+	                             alien1.setOpacity(1);
+	                             alien2.setOpacity(1);
+	                             alien3.setOpacity(1);
+	                             alien4.setOpacity(1);
+	                             marine1.setOpacity(0.6);
+	                             marine2.setOpacity(0.6);
+	                             marine3.setOpacity(0.6);
+	                             marine4.setOpacity(0.6);
+	                             turno = 0;
+	                             
 	                        	 break;
 	                         //usuario existe y contraseña mal
 	                         case 2:
@@ -1063,30 +1044,31 @@ $(function() {
 	                             $("#apodoDuplicado").html("");
 	                             ponerVisible($("#menuJugar"), true);
 	                             ponerVisible($("#menuUsuario"), false);
+	                             
+	                             textoTurno.text = "Turno de los Aliens";
+	                             setTimeout(function(){ textoTurno.setText(""); }, 3000);
+	                             alien1.setOpacity(1);
+	                             alien2.setOpacity(1);
+	                             alien3.setOpacity(1);
+	                             alien4.setOpacity(1);
+	                             marine1.setOpacity(0.6);
+	                             marine2.setOpacity(0.6);
+	                             marine3.setOpacity(0.6);
+	                             marine4.setOpacity(0.6);
+	                             turno = 0;
 	                         	 break;
+	                         default:
+	                        	 break;
 	                    }
                     	
-                    	
-
-                        //usuarios.push(newUser);
-                        //posicionUsuario();
+              
 
                     } else {
                     	if ((nombreUsuario == "")) $("#apodoDuplicado").html("El nick no puede estar vacío");
                     	if ((passwordUsuario == "")) $("#apodoDuplicado").html("La contraseña no puede estar vacía");
                     }
                 
-                    textoTurno.text = "Turno de los Aliens";
-                    setTimeout(function(){ textoTurno.setText(""); }, 3000);
-                    alien1.setOpacity(1);
-                    alien2.setOpacity(1);
-                    alien3.setOpacity(1);
-                    alien4.setOpacity(1);
-                    marine1.setOpacity(0.6);
-                    marine2.setOpacity(0.6);
-                    marine3.setOpacity(0.6);
-                    marine4.setOpacity(0.6);
-                    turno = 0;
+
 				})
     
     $("#Bmarines").click(
@@ -1106,6 +1088,19 @@ $(function() {
                              $("#apodoDuplicado").html("");
                              ponerVisible($("#menuJugar"), true);
                              ponerVisible($("#menuUsuario"), false);
+                             
+                             textoTurno.text = "Turno de los Marines";
+                             setTimeout(function(){ textoTurno.setText(""); }, 3000);
+                             alien1.setOpacity(0.6);
+                             alien2.setOpacity(0.6);
+                             alien3.setOpacity(0.6);
+                             alien4.setOpacity(0.6);
+                             marine1.setOpacity(1);
+                             marine2.setOpacity(1);
+                             marine3.setOpacity(1);
+                             marine4.setOpacity(1);
+                             turno = 1;
+                             
                         	 break;
                          //usuario existe y contraseña mal
                          case 2:
@@ -1118,32 +1113,32 @@ $(function() {
                              $("#apodoDuplicado").html("");
                              ponerVisible($("#menuJugar"), true);
                              ponerVisible($("#menuUsuario"), false);
+                             
+                             textoTurno.text = "Turno de los Marines";
+                             setTimeout(function(){ textoTurno.setText(""); }, 3000);
+                             alien1.setOpacity(0.6);
+                             alien2.setOpacity(0.6);
+                             alien3.setOpacity(0.6);
+                             alien4.setOpacity(0.6);
+                             marine1.setOpacity(1);
+                             marine2.setOpacity(1);
+                             marine3.setOpacity(1);
+                             marine4.setOpacity(1);
+                             turno = 1;
                          	 break;
+                         default:
+                        	 break;
                     }
                 	
-                	
-
-                    //usuarios.push(newUser);
-                    //posicionUsuario();
+          
 
                 } else {
                 	if ((nombreUsuario == "")) $("#apodoDuplicado").html("El nick no puede estar vacío");
                 	if ((passwordUsuario == "")) $("#apodoDuplicado").html("La contraseña no puede estar vacía");
                 }
             
-                    textoTurno.x = 250;
-                    textoTurno.text = "Turno de los Space Marines";
-                    setTimeout(function(){ textoTurno.setText(""); }, 3000);
-                    alien1.setOpacity(0.6);
-                    alien2.setOpacity(0.6);
-                    alien3.setOpacity(0.6);
-                    alien4.setOpacity(0.6);
-                    marine1.setOpacity(1);
-                    marine2.setOpacity(1);
-                    marine3.setOpacity(1);
-                    marine4.setOpacity(1);
-                    turno = 1;
-				})
+
+			})
     $("#BatrasIns").click(
 			function() {
                     ponerVisible($("#menu"), true);
@@ -1323,10 +1318,7 @@ $(function() {
 			function() {
                     if(turno % 2 == 0){
                         ///////////////GAME OVER
-                        //game.world.removeAll();
-                        /*text = game.add.text(170, 225, '', { fill: '#ffffff' });
-                        text.fontSize = 70;
-                        text.text = "GANAN LOS MARINES";*/
+
                     	game.add.sprite(0, 0, 'GananMarines');
                         
                         var textUser = game.add.text(370, 470, '', { fill: '#ffffff' });
@@ -1335,10 +1327,6 @@ $(function() {
                         setUsuarios();
                         textUser.text = "Usuario: "+ usuarios[userPos].getId() +" +1p. Total: "+ usuarios[userPos].getPuntos();
 
-                        /*usuarioGanador(usuarios[userPos]);
-                        ordenarRanking(ranking);
-                        cargarClasificacion(ranking);*/
-                        //peticionClasificacion();
                         actualizarClasificacion();
                         ponerVisible($("#imagenRanking"), false);
                                     
@@ -1351,9 +1339,6 @@ $(function() {
                         
                     } else {
                         //game.world.removeAll();
-                        /*text = game.add.text(170, 225, '', { fill: '#ffffff' });
-                        text.fontSize = 70;
-                        text.text = "GANAN LOS ALIENS";*/
                     	game.add.sprite(0, 0, 'GananAliens');
                         
                         var textUser = game.add.text(380, 470, '', { fill: '#ffffff' });
@@ -1362,10 +1347,6 @@ $(function() {
                         setUsuarios();
                         textUser.text = "Usuario: "+ usuarios[userPos].getId() +" +1p. Total: "+ usuarios[userPos].getPuntos();
                         
-                        /*usuarioGanador(usuarios[userPos]);
-                        ordenarRanking(ranking);
-                        cargarClasificacion(ranking);*/
-                        //peticionClasificacion();
                         actualizarClasificacion();
                         ponerVisible($("#imagenRanking"), false);
                                     

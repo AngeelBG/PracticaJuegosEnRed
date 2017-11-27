@@ -52,3 +52,7 @@
 ## _Diagrama_:
 
   ![alt text](https://github.com/AngeelBG/PracticaJuegosEnRed/blob/master/Pantallazos/Diagrama.png)
+  
+## _Diagrama-UML_:
+  
+  ![alt text](https://github.com/AngeelBG/PracticaJuegosEnRed/blob/master/Pantallazos/Diagrama.png)

@@ -28,6 +28,17 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
              [1,1,1,1,1,1,1,1,1,1],
          ];
         
+        jugadores[0][4] = 2;
+        jugadores[1][6] = 3;
+        jugadores[2][4] = 4;
+        jugadores[1][2] = 5;
+        
+        
+        jugadores[9][4] = 6;
+        jugadores[8][6] = 7;
+        jugadores[7][4] = 8;
+        jugadores[8][2] = 9;
+        
         var tiles = [
              [1,1,1,1,1,1,2,2,2,2],
              [1,2,2,2,2,1,1,1,2,2],
@@ -63,6 +74,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
         var userPos;
         var connection;
         var pointerWS;
+        var equipo;
 
         const ANCHOMAPA = 10;
         const ALTOMAPA = 10;
@@ -179,7 +191,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
     function getUsuarios(){
     	$.ajax({
     		method: 'GET',
-    		url : "http://localhost:8020/usuarios/",
+    		url : "http://localhost:8022/usuarios/",
 	 		headers: {"Content-type": "application/json"}
 	 	}).done(function(dato) {
 	 		copia(dato);		
@@ -200,7 +212,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
     function addUsuario() {
 	 	$.ajax({
 	 		method : 'POST',
-	 		url : "http://localhost:8020/usuarios/nuevo",
+	 		url : "http://localhost:8022/usuarios/nuevo",
 	 		headers: {"Content-type": "application/json"},
 	 		data: JSON.stringify({"id": usuarios[userPos].getId(),"password": usuarios[userPos].getPassword(), "puntos": usuarios[userPos].getPuntos(), "equipo": usuarios[userPos].getEquipo()}),
 	 		processData: false
@@ -214,7 +226,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
     function setUsuarios(){
     	$.ajax({
 	 		method : 'PUT',
-	 		url : "http://localhost:8020/usuarios/modify",
+	 		url : "http://localhost:8022/usuarios/modify",
 	 		headers: {"Content-type": "application/json"},
 	 		data: JSON.stringify({"id": usuarios[userPos].getId(),"password": usuarios[userPos].getPassword(), "puntos": usuarios[userPos].getPuntos(), "equipo": usuarios[userPos].getEquipo()}),
 	 		processData: false
@@ -232,7 +244,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
 	 function peticionClasificacion() {
 	 	$.ajax({
 	 		method : 'GET',
-	 		url : "http://localhost:8020/clasificacion/",
+	 		url : "http://localhost:8022/clasificacion/",
 	 		headers: {"Content-type": "application/json"}
 	 	}).done(function(dato) {
 	 		cargarClasificacion(dato);
@@ -240,10 +252,9 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
 	 }
 	
 	 function actualizarClasificacion() {
-	 	console.log(usuarios[userPos].getId()+ ", " + usuarios[userPos].getPuntos());
 	 	$.ajax({
 	 		method : 'POST',
-	 		url : "http://localhost:8020/clasificacion/check",
+	 		url : "http://localhost:8022/clasificacion/check",
 	 		headers: {"Content-type": "application/json"},
 	 		data: JSON.stringify({"posicion": 11, "nombre": usuarios[userPos].getId(), "puntos": usuarios[userPos].getPuntos()}),
 	 		processData: false
@@ -370,7 +381,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
 
     function create() {
     	
-    	connection = new WebSocket('ws://localhost:8020/runicwars');
+    	connection = new WebSocket('ws://localhost:8022/runicwars');
     	
         /* PINTADO DEL MAPA */
         for (var i=0; i < 10; i++){
@@ -433,6 +444,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
    function atacarAliens(pointer){
 
         if((counter2 != 1) ){
+        	
             //Tile a la que quiero atacar
             tiledX = Math.floor(pointer.x/(100));
             tiledY = Math.floor(pointer.y/(60));
@@ -457,7 +469,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                 setTimeout(function(){ marine1.setOpacity(0.6); }, 1000);
                                 
                                 marine1.setLife(personajeSeleccionado.getDamage());
-                                sendMessage("atacar", { id: 6, vida: marine1.getLife()});
+                                sendMessage("atacar", { id: 6, vida: personajeSeleccionado.getDamage()});
                                 if(marine1.getLife()<=0) {
                                     marine1.setSprite('eliminado');
                                     setTimeout(function(){ marine1.kill(); }, 1000);
@@ -492,7 +504,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                 setTimeout(function(){ marine2.setOpacity(0.6); }, 1000);                                
                                 
                                 marine2.setLife(personajeSeleccionado.getDamage());
-                                sendMessage("atacar", { id: 7, vida: marine2.getLife()});
+                                sendMessage("atacar", { id: 7, vida: personajeSeleccionado.getDamage()});
                                 if(marine2.getLife()<=0){
                                     marine2.setSprite('eliminado');
                                     setTimeout(function(){ marine2.kill();  }, 1000);
@@ -505,7 +517,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                 setTimeout(function(){ marine3.setOpacity(0.6); }, 1000);                                
                                 
                                 marine3.setLife(personajeSeleccionado.getDamage());
-                                sendMessage("atacar", { id: 8, vida: marine3.getLife()});
+                                sendMessage("atacar", { id: 8, vida: personajeSeleccionado.getDamage()});
                                 if(marine3.getLife()<=0){
                                     marine3.setSprite('eliminado');
                                     setTimeout(function(){ marine3.kill();  }, 1000);
@@ -519,7 +531,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                 setTimeout(function(){ marine4.setOpacity(0.6); }, 1000);                                
                                 
                                 marine4.setLife(personajeSeleccionado.getDamage());
-                                sendMessage("atacar", { id: 9, vida: marine4.getLife()});
+                                sendMessage("atacar", { id: 9, vida: personajeSeleccionado.getDamage()});
                                 if(marine4.getLife()<=0){
                                     marine4.setSprite('eliminado');
                                     setTimeout(function(){ marine4.kill();  }, 1000);
@@ -591,7 +603,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                 setTimeout(function(){ alien1.setOpacity(0.6); }, 1000);
                                 
                                 alien1.setLife(personajeSeleccionado.getDamage());
-                                sendMessage("atacar", { id: 2, vida: alien1.getLife()});
+                                sendMessage("atacar", { id: 2, vida: personajeSeleccionado.getDamage()});
                                 if(alien1.getLife()<=0) {
                                     alien1.setSprite('eliminado');
                                     setTimeout(function(){ alien1.kill();  }, 1000);
@@ -624,7 +636,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                 setTimeout(function(){ alien2.setOpacity(0.6); }, 1000);                                
                                 
                                 alien2.setLife(personajeSeleccionado.getDamage());
-                                sendMessage("atacar", { id: 3, vida: alien2.getLife()});
+                                sendMessage("atacar", { id: 3, vida: personajeSeleccionado.getDamage()});
                                 if(alien2.getLife()<=0){
                                     alien2.setSprite('eliminado');
                                     setTimeout(function(){ alien2.kill();  }, 1000);
@@ -637,7 +649,8 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                 setTimeout(function(){ alien3.setOpacity(0.6); }, 1000);                                
                                 
                                 alien3.setLife(personajeSeleccionado.getDamage());
-                                sendMessage("atacar", { id: 4, vida: alien3.getLife()});
+             
+                                sendMessage("atacar", { id: 4, vida: personajeSeleccionado.getDamage()});
                                 if(alien3.getLife()<=0){
                                     alien3.setSprite('eliminado');
                                     setTimeout(function(){ alien3.kill();  }, 1000);
@@ -650,7 +663,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                                 setTimeout(function(){ alien4.setOpacity(0.6); }, 1000);                                
                                 
                                 alien4.setLife(personajeSeleccionado.getDamage());
-                                sendMessage("atacar", { id: 5, vida: alien4.getLife()});
+                                sendMessage("atacar", { id: 5, vida: personajeSeleccionado.getDamage()});
                                 if(alien4.getLife()<=0){
                                     alien4.setSprite('eliminado');
                                     setTimeout(function(){ alien4.kill();  }, 1000);
@@ -757,51 +770,51 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
         
     	for (var i=0; i < 10; i++){
     		for (var j= 0; j<10 ; j++){
-    			if (jugadores[j][i]=id)
-    				jugadores[j][i] = 1;
+    			if (jugadores[i][j]==id)
+    				jugadores[i][j] = 1;
             }
         }
-    	jugadores[y][x] = id;
+    	jugadores[x][y] = id;
     	var cx = x*60;
     	var cy = y*100;
     	switch (id){
     	
-    		case "2":
+    		case 2:
     			alien1.mover(cy,cx);
     			
     			break;
     		
-    		case "3":
+    		case 3:
     			alien2.mover(cy,cx);
     			
     			break;
     		
-    		case "4":
+    		case 4:
     			alien3.mover(cy,cx);
     			
     			break;
     		
-    		case "5":
+    		case 5:
     			alien4.mover(cy,cx);
     			
     			break;
     			
-    		case "6":
+    		case 6:
     			marine1.mover(cy,cx);
     			
     			break;
     			
-    		case "7":
+    		case 7:
     			marine2.mover(cy,cx);
     			
     			break;
     			
-    		case "8":
+    		case 8:
     			marine3.mover(cy,cx);
     		
     			break;
     			
-    		case "9":
+    		case 9:
     			marine4.mover(cy,cx);
     			
     			break;
@@ -823,15 +836,14 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
         }
     	switch (id){
     	
-			case "2":
+			case 2:
 				alien1.setLife(vida);
+				
 				if (alien1.getLife()<= 0){
-					//pos lo matas;
 					alien1.setSprite('eliminado');
                     setTimeout(function(){ alien1.kill();  }, 1000);
 
                     ///////////////GAME OVER
-                    /////////////////////////PENDIENTE DE REVISAR
                     game.add.sprite(0, 0, 'GananMarines');
 
                     actualizarClasificacion();
@@ -848,7 +860,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
     			}
 				break;
 			
-			case "3":
+			case 3:
 				alien2.setLife(vida);
 				if(alien2.getLife()<=0){
                     alien2.setSprite('eliminado');
@@ -859,8 +871,9 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
 				
 				break;
 			
-			case "4":
+			case 4:
 				alien3.setLife(vida);
+
 				if(alien3.getLife()<=0){
                     alien3.setSprite('eliminado');
                     setTimeout(function(){ alien3.kill();  }, 1000);
@@ -870,7 +883,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
 				
 				break;
 			
-			case "5":
+			case 5:
 				alien4.setLife(vida);
 				if(alien4.getLife()<=0){
                     alien4.setSprite('eliminado');
@@ -881,7 +894,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
 				
 				break;
 				
-			case "6":
+			case 6:
 				marine1.setLife(vida);
 				if(marine1.getLife()<=0){
 					marine1.setSprite('eliminado');
@@ -892,7 +905,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
 				
 				break;
 				
-			case "7":
+			case 7:
 				marine2.setLife(vida);
 				if(marine2.getLife()<=0){
 					marine2.setSprite('eliminado');
@@ -903,7 +916,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
 				
 				break;
 				
-			case "8":
+			case 8:
 				marine3.setLife(vida);
 				if(marine3.getLife()<=0){
 					marine3.setSprite('eliminado');
@@ -914,7 +927,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
 			
 				break;
 				
-			case "9":
+			case 9:
 				marine4.setLife(vida);
 				if(marine4.getLife()<=0){
 					marine4.setSprite('eliminado');
@@ -926,6 +939,123 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
 				break;
 			
     	}
+    	
+        textoInfoAtaque.x = (cy * 100);
+        textoInfoAtaque.y = (cx * 60)+60;
+        textoInfoAtaque.setText("-"+vida);
+        setTimeout(function(){ textoInfoAtaque.setText(""); }, 1000);
+    }
+    
+    function turnoWS(nuevoTurno){
+    	turno = nuevoTurno;
+    	if(turno % 2 == 0){
+            alien1.setHasMoved(false);
+            alien2.setHasMoved(false);
+            alien3.setHasMoved(false);
+            alien4.setHasMoved(false);
+            alien1.setHasAttacked(false);
+            alien2.setHasAttacked(false);
+            alien3.setHasAttacked(false);
+            alien4.setHasAttacked(false);
+            
+        } else {
+            marine1.setHasMoved(false);
+            marine2.setHasMoved(false);
+            marine3.setHasMoved(false);
+            marine4.setHasMoved(false);
+            marine1.setHasAttacked(false);
+            marine2.setHasAttacked(false);
+            marine3.setHasAttacked(false);
+            marine4.setHasAttacked(false);
+        }
+    
+        //Deselecciono los sprites
+        alien1.setSprite('AlienQueen');
+        alien2.setSprite('Spitter');
+        alien3.setSprite('Claws');
+        alien4.setSprite('Charger');
+        marine1.setSprite('King');
+        marine2.setSprite('Tank');
+        marine3.setSprite('Marine');
+        marine4.setSprite('Ranger');
+    
+
+        ponerVisibleButton($("#Bfin"), true);
+        
+        
+        textoInfo.setText("");
+    
+        if (turno % 2 == 0){
+            textoTurno.x = 280;
+            textoTurno.text = "Turno de los Aliens";
+            setTimeout(function(){ textoTurno.setText(""); }, 3000);
+            alien1.setOpacity(1);
+            alien2.setOpacity(1);
+            alien3.setOpacity(1);
+            alien4.setOpacity(1);
+            marine1.setOpacity(0.6);
+            marine2.setOpacity(0.6);
+            marine3.setOpacity(0.6);
+            marine4.setOpacity(0.6);
+
+        }else{
+            textoTurno.x = 230;
+            textoTurno.text = "Turno de los Space Marines";
+            setTimeout(function(){ textoTurno.setText(""); }, 3000);
+            alien1.setOpacity(0.6);
+            alien2.setOpacity(0.6);
+            alien3.setOpacity(0.6);
+            alien4.setOpacity(0.6);
+            marine1.setOpacity(1);
+            marine2.setOpacity(1);
+            marine3.setOpacity(1);
+            marine4.setOpacity(1);
+        }
+    }
+    
+    function rendirseWS (ganador){
+    	
+    	if (ganador == 1){
+    		
+        	game.add.sprite(0, 0, 'GananMarines');
+            
+            var textUser = game.add.text(370, 470, '', { fill: '#ffffff' });
+            textUser.fontSize = 30;
+            usuarios[userPos].setPuntos(1);
+            setUsuarios();
+            textUser.text = "Usuario: "+ usuarios[userPos].getId() +" +1p. Total: "+ usuarios[userPos].getPuntos();
+
+            actualizarClasificacion();
+            ponerVisible($("#imagenRanking"), false);
+                        
+            button = game.add.button(360, 330, 'button', actionOnClick, this, 0, 0, 0);
+            ponerVisibleButton($("#Bmover"), false);
+            ponerVisibleButton($("#Batacar"), false);
+            ponerVisibleButton($("#Besperar"), false);
+            ponerVisibleButton($("#Bfin"), false);
+            ponerVisibleButton($("#Brendirse"), false);
+            
+    	}else {
+    		game.add.sprite(0, 0, 'GananAliens');
+            
+            var textUser = game.add.text(380, 470, '', { fill: '#ffffff' });
+            textUser.fontSize = 30;
+            usuarios[userPos].setPuntos(1);
+            setUsuarios();
+            textUser.text = "Usuario: "+ usuarios[userPos].getId() +" +1p. Total: "+ usuarios[userPos].getPuntos();
+            
+            actualizarClasificacion();
+            ponerVisible($("#imagenRanking"), false);
+                        
+            button = game.add.button(370, 350, 'button', actionOnClick, this, 0, 0, 0);
+            ponerVisibleButton($("#Bmover"), false);
+            ponerVisibleButton($("#Batacar"), false);
+            ponerVisibleButton($("#Besperar"), false);
+            ponerVisibleButton($("#Bfin"), false);
+            ponerVisibleButton($("#Brendirse"), false);
+            
+    	}
+    	
     }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -938,8 +1068,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
             identificador = jugadores[coordY][coordX];  //Identifico el personaje clickado
                                                         //Y cambio el sprite a seleccionado y deselecciono el resto
             
-            console.log("turno: " + turno + " equipaso: " + usuarios[userPos].getEquipo() + " userPos: " +userPos + " points: " + usuarios[userPos].getPuntos() );
-            if(turno % 2 == 0 && usuarios[userPos].getEquipo()==0){ 
+            if(turno % 2 == 0 && equipo== 0){ 
                 switch(identificador) {
                     case 2:
                         alien2.setSprite('Spitter');
@@ -1021,8 +1150,8 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                         personajeSeleccionado = null;
 
                 }
-            } else {
-                switch(identificador) {
+            } else if(turno % 2 != 0 && equipo== 1){ 
+            	switch(identificador) {
                     case 6:
                         alien1.setSprite('AlienQueen');
                         alien2.setSprite('Spitter');
@@ -1103,7 +1232,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
                     default:
                         personajeSeleccionado = null;
                         
-
+                
 
                 }
             }
@@ -1150,6 +1279,8 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
 
         ponerVisible($("#menu"), true);
         ponerVisible($("#menuJugar"), false);
+        cambioEstadoBloqueado($("#Bmarines"),true);
+        cambioEstadoBloqueado($("#Baliens"),true);
         create();
         button.input.stop();
         
@@ -1167,7 +1298,13 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
 			console.log("WS accion: " + message.accion);
 
 		    switch (message.accion) {
-		            
+		    	case "bloqueo":
+		    		if(message.bloqueo == 0)
+		                cambioEstadoBloqueado($("#Bmarines"),false);
+		    		if(message.bloqueo == 1)
+		                cambioEstadoBloqueado($("#Baliens"),false);
+		    		
+		    		break;
 		    	case "mover":
 		    		moveSpriteWS(message.id, message.x, message.y);
 		            break;
@@ -1175,14 +1312,18 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
 		    	case "atacar":
 		            atacarWS(message.id, message.vida);
 		            break;
-
-		    	case "fin":
-		            alert('Error: ' + msg.data); 
+		            
+		    	case "turno":
+		    		
+		    		turnoWS(message.turno)
+ 
+		            
 		            break;
 		        
 		    	case "rendirse":
-		            alert('Error: ' + msg.data); 
-		            break;
+		            	
+		    		rendirseWS(message.ganador);
+		    		break;
 		    }
 		}
 		connection.onclose = function() {
@@ -1236,19 +1377,7 @@ function cambioEstadoBloqueado(boton, nuevoEstado){
 
 // funcion que se invoca al cargar la pagina
 $(function() {
-	
-		
-		
-	
-	
-		$('#send-btn').click(function() {
-			var msg = {
-				name : $('#name').val(),
-				message : $('#message').val()
-			}
-		    $('#chat').val($('#chat').val() + "\n" + msg.name + ": " + msg.message);
-			connection.send(JSON.stringify(msg));
-		});
+
     // BOTONES MENUS DEL JUEGO 
     $("#Bjugar").click(
 			function() {
@@ -1277,10 +1406,12 @@ $(function() {
     
     $("#Baliens").click(
 			function() {
-                    
+                    equipo = 0;
                     var nombreUsuario = document.getElementById("apodo").value;
                     var passwordUsuario = document.getElementById("password").value;
-                
+                    
+                    sendMessage("bloqueo", { bloqueo: 1});
+                    
                     if ((nombreUsuario != "") && (passwordUsuario != "")) {
                     	
                     	var caso = usuarioValido(nombreUsuario, passwordUsuario);
@@ -1290,7 +1421,6 @@ $(function() {
 	                         case 1:
 	                        	 posicionUsuario(nombreUsuario);
 	                        	 usuarios[userPos].setEquipo(0);
-	                        	 console.log("mi presioso equipo es: " + usuarios[userPos].getEquipo());
 	                             $("#apodoDuplicado").html("");
 	                             ponerVisible($("#menuJugar"), true);
 	                             ponerVisible($("#menuUsuario"), false);
@@ -1315,7 +1445,6 @@ $(function() {
 	                         //usuario no existe
 	                         case 3:
 	                             newUser = new Usuario(nombreUsuario, 0, passwordUsuario, 0);
-	                             console.log("equipo del newUser: " + newUser.getEquipo());
 	                             generarUsuario();
 	                             $("#apodoDuplicado").html("");
 	                             ponerVisible($("#menuJugar"), true);
@@ -1349,9 +1478,16 @@ $(function() {
     
     $("#Bmarines").click(
 			function() {
-                
+                equipo = 1;
                 var nombreUsuario = document.getElementById("apodo").value;
                 var passwordUsuario = document.getElementById("password").value;
+                
+                sendMessage("bloqueo", { bloqueo: 0});
+                
+                ponerVisibleButton($("#Bmover"), false);
+                ponerVisibleButton($("#Batacar"), false);
+                ponerVisibleButton($("#Besperar"), false);
+                ponerVisibleButton($("#Bfin"), false);
             
                 if ((nombreUsuario != "") && (passwordUsuario != "")) {
                 	
@@ -1366,7 +1502,7 @@ $(function() {
                              ponerVisible($("#menuJugar"), true);
                              ponerVisible($("#menuUsuario"), false);
                              
-                             textoTurno.text = "Turno de los Marines";
+                             textoTurno.text = "Turno de los Aliens";
                              setTimeout(function(){ textoTurno.setText(""); }, 3000);
                              alien1.setOpacity(0.6);
                              alien2.setOpacity(0.6);
@@ -1376,7 +1512,9 @@ $(function() {
                              marine2.setOpacity(1);
                              marine3.setOpacity(1);
                              marine4.setOpacity(1);
-                             turno = 1;
+                             turno = 0;
+                             
+                             //////////////////////////////////// OCULTAR TODOS LOS BOTONES
                              
                         	 break;
                          //usuario existe y contraseña mal
@@ -1391,7 +1529,7 @@ $(function() {
                              ponerVisible($("#menuJugar"), true);
                              ponerVisible($("#menuUsuario"), false);
                              
-                             textoTurno.text = "Turno de los Marines";
+                             textoTurno.text = "Turno de los Aliens";
                              setTimeout(function(){ textoTurno.setText(""); }, 3000);
                              alien1.setOpacity(0.6);
                              alien2.setOpacity(0.6);
@@ -1401,7 +1539,7 @@ $(function() {
                              marine2.setOpacity(1);
                              marine3.setOpacity(1);
                              marine4.setOpacity(1);
-                             turno = 1;
+                             turno = 0;
                          	 break;
                          default:
                         	 break;
@@ -1541,6 +1679,8 @@ $(function() {
                     }
                 
                     turno++;
+                    
+                    sendMessage("turno", { turno: turno});
                 
                     //Deselecciono los sprites
                     alien1.setSprite('AlienQueen');
@@ -1556,10 +1696,12 @@ $(function() {
                     cambioEstadoBloqueado($("#Batacar"),true);
                     cambioEstadoBloqueado($("#Bmover"),true);
                     cambioEstadoBloqueado($("#Besperar"),true);
+                    cambioEstadoBloqueado($("#Bfin"),true);
                     
                     ponerVisibleButton($("#Bmover"), false);
                     ponerVisibleButton($("#Batacar"), false);
                     ponerVisibleButton($("#Besperar"), false);
+                    ponerVisibleButton($("#Bfin"), false);
                     
                     textoInfo.setText("");
                 
@@ -1595,44 +1737,93 @@ $(function() {
 			function() {
                     if(turno % 2 == 0){
                         ///////////////GAME OVER
-
-                    	game.add.sprite(0, 0, 'GananMarines');
-                        
-                        var textUser = game.add.text(370, 470, '', { fill: '#ffffff' });
-                        textUser.fontSize = 30;
-                        usuarios[userPos].setPuntos(1);
-                        setUsuarios();
-                        textUser.text = "Usuario: "+ usuarios[userPos].getId() +" +1p. Total: "+ usuarios[userPos].getPuntos();
-
-                        actualizarClasificacion();
-                        ponerVisible($("#imagenRanking"), false);
-                                    
-                        button = game.add.button(360, 330, 'button', actionOnClick, this, 0, 0, 0);
-                        ponerVisibleButton($("#Bmover"), false);
-                        ponerVisibleButton($("#Batacar"), false);
-                        ponerVisibleButton($("#Besperar"), false);
-                        ponerVisibleButton($("#Bfin"), false);
-                        ponerVisibleButton($("#Brendirse"), false);
+                    	
+                    	if (equipo == 0){
+	
+	                    	game.add.sprite(0, 0, 'GananMarines');
+	                        
+	                        var textUser = game.add.text(370, 470, '', { fill: '#ffffff' });
+	                        textUser.fontSize = 30;
+	                        usuarios[userPos].setPuntos(1);
+	                        setUsuarios();
+	                        textUser.text = "Usuario: "+ usuarios[userPos].getId() +" +1p. Total: "+ usuarios[userPos].getPuntos();
+	
+	                        actualizarClasificacion();
+	                        ponerVisible($("#imagenRanking"), false);
+	                                    
+	                        button = game.add.button(360, 330, 'button', actionOnClick, this, 0, 0, 0);
+	                        ponerVisibleButton($("#Bmover"), false);
+	                        ponerVisibleButton($("#Batacar"), false);
+	                        ponerVisibleButton($("#Besperar"), false);
+	                        ponerVisibleButton($("#Bfin"), false);
+	                        ponerVisibleButton($("#Brendirse"), false);
+	                        
+	                        sendMessage("rendirse", { ganador: 1});
+                    	}else {
+                    		game.add.sprite(0, 0, 'GananAliens');
+                            
+                            var textUser = game.add.text(380, 470, '', { fill: '#ffffff' });
+                            textUser.fontSize = 30;
+                            usuarios[userPos].setPuntos(1);
+                            setUsuarios();
+                            textUser.text = "Usuario: "+ usuarios[userPos].getId() +" +1p. Total: "+ usuarios[userPos].getPuntos();
+                            
+                            actualizarClasificacion();
+                            ponerVisible($("#imagenRanking"), false);
+                                        
+                            button = game.add.button(370, 350, 'button', actionOnClick, this, 0, 0, 0);
+                            ponerVisibleButton($("#Bmover"), false);
+                            ponerVisibleButton($("#Batacar"), false);
+                            ponerVisibleButton($("#Besperar"), false);
+                            ponerVisibleButton($("#Bfin"), false);
+                            ponerVisibleButton($("#Brendirse"), false);
+                            
+                            sendMessage("rendirse", { ganador: 0});
+                    	}
                         
                     } else {
-                        //game.world.removeAll();
-                    	game.add.sprite(0, 0, 'GananAliens');
-                        
-                        var textUser = game.add.text(380, 470, '', { fill: '#ffffff' });
-                        textUser.fontSize = 30;
-                        usuarios[userPos].setPuntos(1);
-                        setUsuarios();
-                        textUser.text = "Usuario: "+ usuarios[userPos].getId() +" +1p. Total: "+ usuarios[userPos].getPuntos();
-                        
-                        actualizarClasificacion();
-                        ponerVisible($("#imagenRanking"), false);
-                                    
-                        button = game.add.button(370, 350, 'button', actionOnClick, this, 0, 0, 0);
-                        ponerVisibleButton($("#Bmover"), false);
-                        ponerVisibleButton($("#Batacar"), false);
-                        ponerVisibleButton($("#Besperar"), false);
-                        ponerVisibleButton($("#Bfin"), false);
-                        ponerVisibleButton($("#Brendirse"), false);
+                    	if (equipo == 0){
+                    		
+	                    	game.add.sprite(0, 0, 'GananMarines');
+	                        
+	                        var textUser = game.add.text(370, 470, '', { fill: '#ffffff' });
+	                        textUser.fontSize = 30;
+	                        usuarios[userPos].setPuntos(1);
+	                        setUsuarios();
+	                        textUser.text = "Usuario: "+ usuarios[userPos].getId() +" +1p. Total: "+ usuarios[userPos].getPuntos();
+	
+	                        actualizarClasificacion();
+	                        ponerVisible($("#imagenRanking"), false);
+	                                    
+	                        button = game.add.button(360, 330, 'button', actionOnClick, this, 0, 0, 0);
+	                        ponerVisibleButton($("#Bmover"), false);
+	                        ponerVisibleButton($("#Batacar"), false);
+	                        ponerVisibleButton($("#Besperar"), false);
+	                        ponerVisibleButton($("#Bfin"), false);
+	                        ponerVisibleButton($("#Brendirse"), false);
+	                        
+	                        sendMessage("rendirse", { ganador: 1});
+                    	}else {
+                    		game.add.sprite(0, 0, 'GananAliens');
+                            
+                            var textUser = game.add.text(380, 470, '', { fill: '#ffffff' });
+                            textUser.fontSize = 30;
+                            usuarios[userPos].setPuntos(1);
+                            setUsuarios();
+                            textUser.text = "Usuario: "+ usuarios[userPos].getId() +" +1p. Total: "+ usuarios[userPos].getPuntos();
+                            
+                            actualizarClasificacion();
+                            ponerVisible($("#imagenRanking"), false);
+                                        
+                            button = game.add.button(370, 350, 'button', actionOnClick, this, 0, 0, 0);
+                            ponerVisibleButton($("#Bmover"), false);
+                            ponerVisibleButton($("#Batacar"), false);
+                            ponerVisibleButton($("#Besperar"), false);
+                            ponerVisibleButton($("#Bfin"), false);
+                            ponerVisibleButton($("#Brendirse"), false);
+                            
+                            sendMessage("rendirse", { ganador: 0});
+                    	}
                     }
 				})
     

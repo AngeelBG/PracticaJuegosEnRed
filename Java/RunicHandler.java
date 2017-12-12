@@ -42,20 +42,24 @@ public class RunicHandler extends TextWebSocketHandler {
 
 		
 		switch(action){
-			case("mover"):{ //lo que le llega al servidor
+		
+			case("bloqueo"):{
+	
+				int	bloqueo = dato.get("bloqueo").asInt();
 				
-					String id = "";
-					int x= 100;
-					int y = 100;
-					
-					if( dato.get("id").asText() != null)
-						id = dato.get("id").asText();
-					
-					if( dato.get("x").asInt() != 100)
-						x = dato.get("x").asInt();
-					
-					if( dato.get("y").asInt() != 100)
-						y = dato.get("y").asInt();
+				ObjectNode respuesta = mapper.createObjectNode();
+				
+				respuesta.put("accion", action); 
+				respuesta.put("bloqueo", bloqueo); 
+				
+				sendOtherParticipants(session, respuesta);
+				break;
+			}
+			case("mover"):{ //lo que le llega al servidor
+
+					int id = dato.get("id").asInt();
+					int x = dato.get("x").asInt();
+					int y = dato.get("y").asInt();
 					
 					ObjectNode respuesta = mapper.createObjectNode();
 					System.out.println("he guardado" + id + x + y);
@@ -71,17 +75,12 @@ public class RunicHandler extends TextWebSocketHandler {
 				}
 				case("atacar"):{
 					
-					String id = "";
-					int vida = 500;
-					
-					if( dato.get("id").asText() != null)
-						id = dato.get("id").asText();
-					
-					if( dato.get("vida").asInt() != 500)
-						vida = dato.get("vida").asInt();
+
+					int id = dato.get("id").asInt();
+					int vida = dato.get("vida").asInt();
 					
 					ObjectNode respuesta = mapper.createObjectNode();
-					System.out.println("he guardado" + id + vida);
+					System.out.println("he guardado id" + id + vida);
 					
 					respuesta.put("accion", action); 
 					respuesta.put("id", id); 
@@ -90,6 +89,33 @@ public class RunicHandler extends TextWebSocketHandler {
 					sendOtherParticipants(session, respuesta);
 					break;
 					
+				}
+				case("turno"):{
+					
+
+					int	turno = dato.get("turno").asInt();
+					
+					ObjectNode respuesta = mapper.createObjectNode();
+					System.out.println("he pasado el turno: " + turno);
+					
+					respuesta.put("accion", action); 
+					respuesta.put("turno", turno); 
+					
+					sendOtherParticipants(session, respuesta);
+					break;
+					
+				}
+				case("rendirse"):{
+
+					int	ganador = dato.get("ganador").asInt();
+					
+					ObjectNode respuesta = mapper.createObjectNode();
+					
+					respuesta.put("accion", action); 
+					respuesta.put("ganador", ganador); 
+					
+					sendOtherParticipants(session, respuesta);
+					break;
 				}
 		}
 			
@@ -102,14 +128,22 @@ public class RunicHandler extends TextWebSocketHandler {
 		ObjectNode newNode = mapper.createObjectNode();
 		
 		String action = node.get("accion").asText();
-		JsonNode dato = node.get("dato");
+		//JsonNode dato = node.get("dato");
 		
 		switch(action){
-		
-			case("mover"):{ //lo que le llega al servidor
+			case("bloqueo"):{ //lo que le llega al servidor
 				
 				newNode.put("accion", node.get("accion").asText());
-				newNode.put("id", node.get("id").asText());
+				newNode.put("bloqueo", node.get("bloqueo").asInt());
+				
+				break;
+				
+				}
+		
+			case("mover"):{ 
+				
+				newNode.put("accion", node.get("accion").asText());
+				newNode.put("id", node.get("id").asInt());
 				newNode.put("x", node.get("x").asInt());
 				newNode.put("y", node.get("y").asInt());
 				
@@ -120,12 +154,28 @@ public class RunicHandler extends TextWebSocketHandler {
 			case("atacar"):{
 					
 				newNode.put("accion", node.get("accion").asText());
-				newNode.put("id", node.get("id").asText());
+				newNode.put("id", node.get("id").asInt());
 				newNode.put("vida", node.get("vida").asInt());
 				
 				break;
 					
 				}
+			case("turno"):{
+				
+				newNode.put("accion", node.get("accion").asText());
+				newNode.put("turno", node.get("turno").asInt());
+				
+				break;
+				
+			}
+			case("rendirse"):{
+				
+				newNode.put("accion", node.get("accion").asText());
+				newNode.put("ganador", node.get("ganador").asInt());
+				
+				break;
+				
+			}
 		}
 
 

@@ -57,6 +57,23 @@
   
   ![alt text](https://github.com/AngeelBG/PracticaJuegosEnRed/blob/master/Pantallazos/UML-RunicWars.jpg)
   
+## _Documentación del protocolo WS_:
+  
+  Cada mensaje de WebSocket consta de : una primera información de la acción que voy a realizar y una segunda información en formato JSON con un conjunto de datos de la acción mencionada.
+  
+Tipos:
+
+Bloqueo: envía el ejercito que ha seleccionado el jugador, para bloquear así el botón para que el segundo jugador no lo seleccione.
+
+Mover: cuando un jugador realiza la acción de movimiento, la manda al servidor con el id de la tropa que ha movido y la posición a la que se mueve, y este se la reenvía a todos los clientes.
+
+Atacar: cuando se realiza la acción de atacar, manda al servidor el id de la tropa que ha sido atacada y la vida que le ha restado.
+
+Turno: cuando el usuario finaliza el turno, se pasa la variable al servidor, el cual la devuelve al resto de jugadores.
+
+Rendirse: cuando el jugador se rinde, se pasa el ganador al servidor, devolviéndolo al resto de jugadores después.
+
+  
 ## _Instrucciones_:
 1. Descargar el archivo de la carpeta Ejecutable.
 2. Una vez descargado en tu ordenador, clickear boton derecho sobre el archivo y ejecutar con Java

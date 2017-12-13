@@ -80,4 +80,4 @@ Rendirse: cuando el jugador se rinde, se pasa el ganador al servidor, devolvién
 ## _Instrucciones_:
 1. Descargar el archivo de la carpeta Ejecutable.
 2. Una vez descargado en tu ordenador, clickear boton derecho sobre el archivo y ejecutar con Java
-3. Abrir el navegador (preferentemente Chrome) y poner la dirección : http://localhost:8019/
+3. Abrir el navegador (preferentemente Chrome) y poner la dirección : http://localhost:8022/

@@ -828,7 +828,7 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
     	var cy;
     	for (var i=0; i < 10; i++){
     		for (var j= 0; j<10 ; j++){
-    			if (jugadores[j][i]=id){
+    			if (jugadores[i][j]==id){
     				cx = i;
     				cy = j;
     			}    			
@@ -1067,7 +1067,8 @@ var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'zonaJuego', { preload: prelo
 
             identificador = jugadores[coordY][coordX];  //Identifico el personaje clickado
                                                         //Y cambio el sprite a seleccionado y deselecciono el resto
-            
+            console.log ("identificador del switch: "+identificador);
+            console.log ("coord x: "+ coordY+" y: "+ coordX);
             if(turno % 2 == 0 && equipo== 0){ 
                 switch(identificador) {
                     case 2:

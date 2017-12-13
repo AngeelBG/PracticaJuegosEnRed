@@ -2,7 +2,7 @@
 # Runic Wars
 
 ## _Link_:
-https://youtu.be/zpRZDGNVl98
+Gameplay: https://youtu.be/zpRZDGNVl98
 
 ## _Descripción_:
  + **Objetivo**: Runic Wars es un juego de estrategia de guerra por turnos multijugador, inspirado en Warhammer, en el cual el objetivo es ir eliminando las tropas del equipo enemigo, para conseguir acabar con su Rey.

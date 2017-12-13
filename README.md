@@ -64,9 +64,13 @@
 Tipos:
 
 Bloqueo: envía el ejercito que ha seleccionado el jugador, para bloquear así el botón para que el segundo jugador no lo seleccione.
+
 Mover: cuando un jugador realiza la acción de movimiento, la manda al servidor con el id de la tropa que ha movido y la posición a la que se mueve, y este se la reenvía a todos los clientes.
+
 Atacar: cuando se realiza la acción de atacar, manda al servidor el id de la tropa que ha sido atacada y la vida que le ha restado.
+
 Turno: cuando el usuario finaliza el turno, se pasa la variable al servidor, el cual la devuelve al resto de jugadores.
+
 Rendirse: cuando el jugador se rinde, se pasa el ganador al servidor, devolviéndolo al resto de jugadores después.
 
   

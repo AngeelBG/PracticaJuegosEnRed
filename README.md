@@ -55,7 +55,7 @@
   
 ## _Diagrama-UML_:
   
-  ![alt text](https://github.com/AngeelBG/PracticaJuegosEnRed/blob/master/Pantallazos/UML-RunicWars.jpg)
+  ![alt text](https://github.com/AngeelBG/PracticaJuegosEnRed/blob/master/Pantallazos/UML-RunicWars.JPG)
   
 ## _Documentación del protocolo WS_:
   
